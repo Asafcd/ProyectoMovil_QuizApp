@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Proyecto</string>
+
+
+    <string-array name="Dificultad">
+        <item>Facil</item>
+        <item>Normal</item>
+        <item>Dificil</item>
+    </string-array>
+
+</resources>
