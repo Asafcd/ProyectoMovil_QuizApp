@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Opciones"
-            android:id="@+id/btn_Opciones"
+            android:id="@+id/btn_opciones"
             android:layout_marginTop="30dp"
             android:layout_gravity="center_horizontal"
             />
