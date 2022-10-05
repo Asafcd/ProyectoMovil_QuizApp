@@ -5,17 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 
-class MainActivity2 : AppCompatActivity() {
+class OptionsMenuActivity : AppCompatActivity() {
 
     private lateinit var btn_regresar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.option_menu)
 
         btn_regresar = findViewById<Button>(R.id.btn_regresar)
         btn_regresar.setOnClickListener {
-            val act = Intent(this,MainActivity::class.java)
+            val act = Intent(this,MainMenuActivity::class.java)
             startActivity(act)
         }
     }

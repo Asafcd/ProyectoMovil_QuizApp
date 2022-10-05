@@ -7,14 +7,16 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 
-class MainActivity : AppCompatActivity() {
+
+
+class MainMenuActivity : AppCompatActivity() {
 
     private lateinit var spin: Spinner
     private lateinit var btn_opciones: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_menu)
 
         spin = findViewById(R.id.spinner)
         ArrayAdapter.createFromResource(
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_opciones = findViewById<Button>(R.id.btn_opciones)
         btn_opciones.setOnClickListener {
-            val act2 = Intent(this,MainActivity2::class.java)
+            val act2 = Intent(this,OptionsMenuActivity::class.java)
             startActivity(act2)
         }
 
