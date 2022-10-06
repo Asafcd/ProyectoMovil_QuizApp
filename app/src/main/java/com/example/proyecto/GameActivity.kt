@@ -1,5 +1,6 @@
 package com.example.proyecto
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+
+val SCORE = "SCORE"
 
 class GameActivity : AppCompatActivity() {
 
@@ -21,6 +24,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var txtRemainingHints: TextView
     private lateinit var btnPrev: Button
     private lateinit var btnNext: Button
+    private lateinit var btnFinish: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +44,7 @@ class GameActivity : AppCompatActivity() {
         txtRemainingHints = findViewById(R.id.txt_pistasRestantes)
         btnPrev = findViewById(R.id.btn_prev)
         btnNext = findViewById(R.id.btn_next)
+        btnFinish = findViewById(R.id.btn_finish)
         val extras = intent.extras
         if (extras != null) {
             gameModel.gameDifficulty = extras.getInt(DIFICULTY)
@@ -75,12 +80,18 @@ class GameActivity : AppCompatActivity() {
                             btn.setTextColor(Color.parseColor("#FFFFFF"))
                         } else {
                             btn.setBackgroundColor(Color.parseColor("#008000"))
+                            gameModel.score += 100
                         }
                         btn.isClickable = false
+
                     }
                     gameModel.currentQuestion.selected = button.text.toString()
                     gameModel.currentQuestion.answered = true
-
+                    gameModel.Answer()
+                    if (gameModel.IsFinished)
+                    {
+                        btnFinish.visibility = View.VISIBLE
+                    }
                     if (button.text != gameModel.currentQuestionAnswer) {
                         button.setBackgroundColor(Color.parseColor("#FF0000"))
                     } else {
@@ -91,6 +102,12 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        btnFinish.setOnClickListener {
+            val act4 = Intent(this,ResultsActivity::class.java)
+            act4.putExtra(SCORE, gameModel.score)
+            startActivity(act4)
+
+        }
         btnNext.setOnClickListener {
             gameModel.nextQuestion()
             preguntasElim = gameModel.gameDifficulty-1
