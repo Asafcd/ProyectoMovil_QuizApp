@@ -6,13 +6,15 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 
 
-
+val DIFICULTY = "DIFICULTY"
 class MainMenuActivity : AppCompatActivity() {
 
     private lateinit var spin: Spinner
     private lateinit var btn_opciones: Button
+    private lateinit var btn_jugar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,13 @@ class MainMenuActivity : AppCompatActivity() {
         btn_opciones.setOnClickListener {
             val act2 = Intent(this,OptionsMenuActivity::class.java)
             startActivity(act2)
+        }
+
+        btn_jugar = findViewById<Button>(R.id.btn_Jugar)
+        btn_jugar.setOnClickListener {
+            val act3 = Intent(this,GameActivity::class.java)
+            act3.putExtra(DIFICULTY, spin.selectedItemPosition + 1)
+            startActivity(act3)
         }
 
     }
