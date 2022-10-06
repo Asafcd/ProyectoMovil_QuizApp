@@ -58,7 +58,7 @@ class GameActivity : AppCompatActivity() {
         txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
 
         val answers = gameModel.GetQuestionAnswers()
-
+        var preguntasElim = difficulty-1
         for (i in 3 downTo difficulty + 1) {
             buttons[i].visibility = View.GONE;
         }
@@ -93,6 +93,7 @@ class GameActivity : AppCompatActivity() {
 
         btnNext.setOnClickListener {
             gameModel.nextQuestion()
+            preguntasElim = difficulty-1
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
             val answers = gameModel.GetQuestionAnswers()
@@ -136,6 +137,7 @@ class GameActivity : AppCompatActivity() {
         }
         btnPrev.setOnClickListener{
             gameModel.prevQuestion()
+            preguntasElim = difficulty-1
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -178,7 +180,7 @@ class GameActivity : AppCompatActivity() {
 
             }
         }
-        var preguntasElim = difficulty-1
+
         btnHint.setOnClickListener{
             for(i in 0..difficulty){
                 if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
