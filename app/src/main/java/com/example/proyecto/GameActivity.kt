@@ -40,15 +40,16 @@ class GameActivity : AppCompatActivity() {
         txtRemainingHints = findViewById(R.id.txt_pistasRestantes)
         btnPrev = findViewById(R.id.btn_prev)
         btnNext = findViewById(R.id.btn_next)
-        var difficulty = 0
         val extras = intent.extras
         if (extras != null) {
-            difficulty = extras.getInt(DIFICULTY)
+            gameModel.gameDifficulty = extras.getInt(DIFICULTY)
         }
+
+
         val buttons = listOf<Button>(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
 
         if (gameModel.isEmpty) {
-            gameModel.GetRandomQuestions(difficulty)
+            gameModel.GetRandomQuestions(gameModel.gameDifficulty)
         }
 
         txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -58,10 +59,10 @@ class GameActivity : AppCompatActivity() {
         txtSubject.text = gameModel.currentQuestion.topic
         val answers = gameModel.GetQuestionAnswers()
 
-        for (i in 3 downTo difficulty + 1) {
+        for (i in 3 downTo gameModel.gameDifficulty + 1) {
             buttons[i].visibility = View.GONE;
         }
-        for (i in 0..difficulty) {
+        for (i in 0..gameModel.gameDifficulty) {
             buttons[i].text = answers[i]
 
         }
@@ -93,17 +94,18 @@ class GameActivity : AppCompatActivity() {
         btnNext.setOnClickListener {
             gameModel.nextQuestion()
             txtQuestion.text = gameModel.currentQuestionText
-            txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
+            txtQuestionNumber.text =
+                "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
             txtSubject.text = gameModel.currentQuestion.topic
 
             val answers = gameModel.GetQuestionAnswers()
 
-            for (i in 3 downTo difficulty + 1) {
+            for (i in 3 downTo gameModel.gameDifficulty + 1) {
                 buttons[i].visibility = View.GONE;
             }
 
             if (!gameModel.currentQuestion.answered) {
-                for (i in 0..difficulty) {
+                for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].text = answers[i]
 
 
@@ -112,22 +114,18 @@ class GameActivity : AppCompatActivity() {
                     buttons[i].isClickable = true
                 }
 
-            }
-            else{
-                for (i in 0..difficulty) {
+            } else {
+                for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].setBackgroundColor(Color.parseColor("#000000"))
                     buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
-                    if(buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer)
-                    {
+                    if (buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
                         buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                    }else
-                    {
+                    } else {
                         if (buttons[i].text == gameModel.currentQuestionAnswer)
                             buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                        if (buttons[i].text == gameModel.currentQuestion.selected)
-                        {
+                        if (buttons[i].text == gameModel.currentQuestion.selected) {
                             buttons[i].setBackgroundColor(Color.parseColor("#FF0000"))
                         }
 
@@ -137,20 +135,21 @@ class GameActivity : AppCompatActivity() {
 
             }
         }
-        btnPrev.setOnClickListener{
+        btnPrev.setOnClickListener {
             gameModel.prevQuestion()
             txtQuestion.text = gameModel.currentQuestionText
-            txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
+            txtQuestionNumber.text =
+                "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
             txtSubject.text = gameModel.currentQuestion.topic
 
             val answers = gameModel.GetQuestionAnswers()
 
-            for (i in 3 downTo difficulty + 1) {
+            for (i in 3 downTo gameModel.gameDifficulty + 1) {
                 buttons[i].visibility = View.GONE;
             }
 
             if (!gameModel.currentQuestion.answered) {
-                for (i in 0..difficulty) {
+                for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].text = answers[i]
 
 
@@ -159,22 +158,18 @@ class GameActivity : AppCompatActivity() {
                     buttons[i].isClickable = true
                 }
 
-            }
-            else{
-                for (i in 0..difficulty) {
+            } else {
+                for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].setBackgroundColor(Color.parseColor("#000000"))
                     buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
-                    if(buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer)
-                    {
+                    if (buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
                         buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                    }else
-                    {
+                    } else {
                         if (buttons[i].text == gameModel.currentQuestionAnswer)
                             buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                        if (buttons[i].text == gameModel.currentQuestion.selected)
-                        {
+                        if (buttons[i].text == gameModel.currentQuestion.selected) {
                             buttons[i].setBackgroundColor(Color.parseColor("#FF0000"))
                         }
 

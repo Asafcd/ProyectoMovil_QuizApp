@@ -9,6 +9,7 @@ class GameModel : ViewModel() {
     private var NumberOfQuestions = 0
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
+    var gameDifficulty = 0
 
     init {
         allQuestions.add(
