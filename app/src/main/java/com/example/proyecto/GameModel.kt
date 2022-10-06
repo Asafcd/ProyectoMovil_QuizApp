@@ -10,6 +10,8 @@ class GameModel : ViewModel() {
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
     var gameDifficulty = 0
+    var score = 0
+    private var questionsAnswered = 0
 
     init {
         allQuestions.add(
@@ -268,22 +270,26 @@ class GameModel : ViewModel() {
     val isEmpty: Boolean
          get() = gameQuestions.size == 0
 
-    val QuestionIndex: Int
-        get() = currentQuestionIndex
 
     fun nextQuestion(){
         currentQuestionIndex = (currentQuestionIndex + 1) % gameQuestions.size
     }
 
-    fun prevQuestion(){
-        if(currentQuestionIndex >= 0) {
+    fun prevQuestion() {
+        if (currentQuestionIndex >= 0) {
             currentQuestionIndex--
         }
-        if (currentQuestionIndex == -1){
-            currentQuestionIndex = gameQuestions.size -1
+        if (currentQuestionIndex == -1) {
+            currentQuestionIndex = gameQuestions.size - 1
         }
     }
 
-    val IsAnswered: Boolean
-        get() = gameQuestions[currentQuestionIndex].answered
+    fun Answer(){
+        questionsAnswered++
+    }
+
+    val IsFinished: Boolean
+        get() = questionsAnswered == gameQuestions.size
+
+
 }
