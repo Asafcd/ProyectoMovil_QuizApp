@@ -44,8 +44,6 @@ class GameActivity : AppCompatActivity() {
         if (extras != null) {
             gameModel.gameDifficulty = extras.getInt(DIFICULTY)
         }
-
-
         val buttons = listOf<Button>(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
 
         if (gameModel.isEmpty) {
@@ -57,8 +55,10 @@ class GameActivity : AppCompatActivity() {
         txtQuestion.text = "${gameModel.currentQuestion.question}"
 
         txtSubject.text = gameModel.currentQuestion.topic
-        val answers = gameModel.GetQuestionAnswers()
+        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
 
+        val answers = gameModel.GetQuestionAnswers()
+        var preguntasElim = gameModel.gameDifficulty-1
         for (i in 3 downTo gameModel.gameDifficulty + 1) {
             buttons[i].visibility = View.GONE;
         }
@@ -93,6 +93,7 @@ class GameActivity : AppCompatActivity() {
 
         btnNext.setOnClickListener {
             gameModel.nextQuestion()
+            preguntasElim = gameModel.gameDifficulty-1
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -137,6 +138,7 @@ class GameActivity : AppCompatActivity() {
         }
         btnPrev.setOnClickListener {
             gameModel.prevQuestion()
+            preguntasElim = difficulty-1
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -180,6 +182,27 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        btnHint.setOnClickListener{
+            for(i in 0..difficulty){
+                if(gameModel.getHints > 0){
+                    if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
+                        buttons[i].performClick()
+                        gameModel.useHint()
+                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                        break
+                    }
+                    if (buttons[i].text != gameModel.currentQuestionAnswer && buttons[i].isClickable && preguntasElim > 0){
+                        preguntasElim -= 1
+                        buttons[i].isClickable = false
+                        buttons[i].setBackgroundColor(Color.parseColor("#444444"))
+                        gameModel.useHint()
+                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                        break
+                    }
+                }
+            }
+
+        }
 
     }
 

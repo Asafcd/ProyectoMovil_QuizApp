@@ -10,6 +10,7 @@ class GameModel : ViewModel() {
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
     var gameDifficulty = 0
+    private var hintsRemaining = 5
 
     init {
         allQuestions.add(
@@ -219,7 +220,6 @@ class GameModel : ViewModel() {
     }
 
     fun GetRandomQuestions(difficulty: Int) {
-
         for (i in 0 ..9){
             //val randInt = Random.nextInt(allQuestions.size)
             //var question = allQuestions[randInt]
@@ -229,14 +229,13 @@ class GameModel : ViewModel() {
                 question = allQuestions.random()
             }
             gameQuestions.add(question)
-
             var answers = mutableListOf<String>()
             answers.add(question.answer)
             var wrongAnswer = question.wrong_answers.random()
             answers.add(wrongAnswer)
             for (i in 2..difficulty) {
                 while (answers.indexOf(wrongAnswer) != -1) {
-                    wrongAnswer = question.wrong_answers.random()
+                    wrongAnswer = gameQuestions[currentQuestionIndex].wrong_answers.random()
                 }
                 answers.add(wrongAnswer)
             }
@@ -268,8 +267,17 @@ class GameModel : ViewModel() {
     val isEmpty: Boolean
          get() = gameQuestions.size == 0
 
-    val QuestionIndex: Int
+    val questionIndex: Int
         get() = currentQuestionIndex
+
+    val getHints: Int
+        get() = hintsRemaining
+
+    fun useHint(){
+        if (hintsRemaining >= 1) {
+            hintsRemaining -= 1
+        }
+    }
 
     fun nextQuestion(){
         currentQuestionIndex = (currentQuestionIndex + 1) % gameQuestions.size
