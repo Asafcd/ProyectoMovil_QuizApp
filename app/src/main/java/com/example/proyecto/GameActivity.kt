@@ -16,7 +16,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var btnAnswer3: Button
     private lateinit var btnAnswer4: Button
     private lateinit var btnHint: Button
-    private lateinit var txtScore: TextView
+    private lateinit var txtSubject: TextView
     private lateinit var txtQuestionNumber: TextView
     private lateinit var txtRemainingHints: TextView
     private lateinit var btnPrev: Button
@@ -36,7 +36,7 @@ class GameActivity : AppCompatActivity() {
         btnAnswer4 = findViewById(R.id.btn_respuesta4)
         btnHint = findViewById(R.id.btn_hint)
         txtQuestionNumber = findViewById(R.id.txt_numPreguntas)
-        txtScore = findViewById(R.id.txt_puntuacion)
+        txtSubject = findViewById(R.id.txt_tema)
         txtRemainingHints = findViewById(R.id.txt_pistasRestantes)
         btnPrev = findViewById(R.id.btn_prev)
         btnNext = findViewById(R.id.btn_next)
@@ -55,7 +55,7 @@ class GameActivity : AppCompatActivity() {
 
         txtQuestion.text = "${gameModel.currentQuestion.question}"
 
-
+        txtSubject.text = gameModel.currentQuestion.topic
         val answers = gameModel.GetQuestionAnswers()
 
         for (i in 3 downTo difficulty + 1) {
@@ -94,6 +94,8 @@ class GameActivity : AppCompatActivity() {
             gameModel.nextQuestion()
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
+            txtSubject.text = gameModel.currentQuestion.topic
+
             val answers = gameModel.GetQuestionAnswers()
 
             for (i in 3 downTo difficulty + 1) {
@@ -113,6 +115,8 @@ class GameActivity : AppCompatActivity() {
             }
             else{
                 for (i in 0..difficulty) {
+                    buttons[i].setBackgroundColor(Color.parseColor("#000000"))
+                    buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
                     if(buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer)
@@ -136,8 +140,9 @@ class GameActivity : AppCompatActivity() {
         btnPrev.setOnClickListener{
             gameModel.prevQuestion()
             txtQuestion.text = gameModel.currentQuestionText
-            txtQuestionNumber.text =
-                "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
+            txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
+            txtSubject.text = gameModel.currentQuestion.topic
+
             val answers = gameModel.GetQuestionAnswers()
 
             for (i in 3 downTo difficulty + 1) {
@@ -157,6 +162,8 @@ class GameActivity : AppCompatActivity() {
             }
             else{
                 for (i in 0..difficulty) {
+                    buttons[i].setBackgroundColor(Color.parseColor("#000000"))
+                    buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
                     if(buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer)

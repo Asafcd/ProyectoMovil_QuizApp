@@ -218,17 +218,24 @@ class GameModel : ViewModel() {
     }
 
     fun GetRandomQuestions(difficulty: Int) {
+
         for (i in 0 ..9){
-            val randInt = Random.nextInt(allQuestions.size)
-            var question = allQuestions[randInt]
+            //val randInt = Random.nextInt(allQuestions.size)
+            //var question = allQuestions[randInt]
+            //gameQuestions.add(question)
+            var question = allQuestions.random()
+            while (gameQuestions.indexOf(question) != -1){
+                question = allQuestions.random()
+            }
             gameQuestions.add(question)
+
             var answers = mutableListOf<String>()
             answers.add(question.answer)
             var wrongAnswer = question.wrong_answers.random()
             answers.add(wrongAnswer)
             for (i in 2..difficulty) {
                 while (answers.indexOf(wrongAnswer) != -1) {
-                    wrongAnswer = gameQuestions[currentQuestionIndex].wrong_answers.random()
+                    wrongAnswer = question.wrong_answers.random()
                 }
                 answers.add(wrongAnswer)
             }
