@@ -1,5 +1,6 @@
 package com.example.proyecto
 
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
 
@@ -9,6 +10,7 @@ class GameModel : ViewModel() {
     private var NumberOfQuestions = 0
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
+    private var hintsRemaining = 5
 
     init {
         allQuestions.add(
@@ -260,8 +262,17 @@ class GameModel : ViewModel() {
     val isEmpty: Boolean
          get() = gameQuestions.size == 0
 
-    val QuestionIndex: Int
+    val questionIndex: Int
         get() = currentQuestionIndex
+
+    val getHints: String
+        get() = hintsRemaining.toString()
+
+    fun useHint(){
+        if (hintsRemaining >= 1) {
+            hintsRemaining -= 1
+        }
+    }
 
     fun nextQuestion(){
         currentQuestionIndex = (currentQuestionIndex + 1) % gameQuestions.size
