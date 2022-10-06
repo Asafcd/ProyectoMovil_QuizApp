@@ -265,8 +265,8 @@ class GameModel : ViewModel() {
     val questionIndex: Int
         get() = currentQuestionIndex
 
-    val getHints: String
-        get() = hintsRemaining.toString()
+    val getHints: Int
+        get() = hintsRemaining
 
     fun useHint(){
         if (hintsRemaining >= 1) {

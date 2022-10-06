@@ -183,17 +183,21 @@ class GameActivity : AppCompatActivity() {
 
         btnHint.setOnClickListener{
             for(i in 0..difficulty){
-                if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
-                    buttons[i].performClick()
-                    break
-                }
-                if (buttons[i].text != gameModel.currentQuestionAnswer && buttons[i].isClickable && preguntasElim > 0){
-                    preguntasElim -= 1
-                    buttons[i].isClickable = false
-                    buttons[i].setBackgroundColor(Color.parseColor("#444444"))
-                    gameModel.useHint()
-                    txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
-                    break
+                if(gameModel.getHints > 0){
+                    if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
+                        buttons[i].performClick()
+                        gameModel.useHint()
+                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                        break
+                    }
+                    if (buttons[i].text != gameModel.currentQuestionAnswer && buttons[i].isClickable && preguntasElim > 0){
+                        preguntasElim -= 1
+                        buttons[i].isClickable = false
+                        buttons[i].setBackgroundColor(Color.parseColor("#444444"))
+                        gameModel.useHint()
+                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                        break
+                    }
                 }
             }
 
