@@ -138,7 +138,7 @@ class GameActivity : AppCompatActivity() {
         }
         btnPrev.setOnClickListener {
             gameModel.prevQuestion()
-            preguntasElim = difficulty-1
+            preguntasElim = gameModel.gameDifficulty-1
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -183,7 +183,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         btnHint.setOnClickListener{
-            for(i in 0..difficulty){
+            for(i in 0..gameModel.gameDifficulty){
                 if(gameModel.getHints > 0){
                     if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
                         buttons[i].performClick()
