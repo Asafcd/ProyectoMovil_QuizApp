@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlin.random.Random
 
 class GameModel : ViewModel() {
-    private val allQuestions = mutableListOf<Question>()
+    private var allQuestions = mutableListOf<Question>()
     private var gameQuestions = mutableListOf<Question>()
     private var NumberOfQuestions = 0
     private var currentQuestionIndex = 0
@@ -227,6 +227,7 @@ class GameModel : ViewModel() {
             //val randInt = Random.nextInt(allQuestions.size)
             //var question = allQuestions[randInt]
             //gameQuestions.add(question)
+            allQuestions.shuffle()
             var question = allQuestions.random()
             while (gameQuestions.indexOf(question) != -1){
                 question = allQuestions.random()
