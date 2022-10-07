@@ -108,7 +108,7 @@ class GameModel : ViewModel() {
         )
         allQuestions.add(
             Question(
-                "¿¿Qué continente no es parte del viejo mundo?\n?",
+                "¿Qué continente no es parte del viejo mundo?",
                 "América",
                 listOf("África", "Asia", "Europa"),
                 "Cultura General",
@@ -301,6 +301,4 @@ class GameModel : ViewModel() {
 
     val IsFinished: Boolean
         get() = questionsAnswered == gameQuestions.size
-
-
 }

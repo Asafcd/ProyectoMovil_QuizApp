@@ -125,8 +125,6 @@ class GameActivity : AppCompatActivity() {
             if (!gameModel.currentQuestion.answered) {
                 for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].text = answers[i]
-
-
                     buttons[i].setBackgroundColor(Color.parseColor("#000000"))
                     buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].isClickable = true
