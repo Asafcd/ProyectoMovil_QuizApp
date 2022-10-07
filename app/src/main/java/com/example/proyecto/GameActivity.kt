@@ -10,6 +10,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
 val SCORE = "SCORE"
+val CORRECTAS = "CORRECTAS"
+val HINTS = "HINTS"
 
 class GameActivity : AppCompatActivity() {
 
@@ -78,9 +80,10 @@ class GameActivity : AppCompatActivity() {
                     for (btn in buttons) {
                         if (btn.text != gameModel.currentQuestionAnswer) {
                             btn.setTextColor(Color.parseColor("#FFFFFF"))
+
                         } else {
                             btn.setBackgroundColor(Color.parseColor("#008000"))
-                            gameModel.score += 100
+                            gameModel.addScore()
                         }
                         btn.isClickable = false
 
@@ -94,9 +97,17 @@ class GameActivity : AppCompatActivity() {
                     }
                     if (button.text != gameModel.currentQuestionAnswer) {
                         button.setBackgroundColor(Color.parseColor("#FF0000"))
+                        gameModel.restartConsecutiveAnsweredCorrectly()
                     } else {
                         button.setBackgroundColor(Color.parseColor("#008000"))
                         button.setTextColor(Color.parseColor("#FFFFFF"))
+                        if(gameModel.getConsecutiveAnswersCorrectly<2) gameModel.addConsecutiveAnswerCorrectly()
+
+                        if(gameModel.getConsecutiveAnswersCorrectly == 2){
+                            gameModel.addHint()
+                            txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                            gameModel.restartConsecutiveAnsweredCorrectly()
+                        }
                     }
                 }
             }
@@ -104,7 +115,10 @@ class GameActivity : AppCompatActivity() {
 
         btnFinish.setOnClickListener {
             val act4 = Intent(this,ResultsActivity::class.java)
-            act4.putExtra(SCORE, gameModel.score)
+            act4.putExtra(SCORE, gameModel.getScore)
+            act4.putExtra(DIFICULTY, gameModel.gameDifficulty)
+            act4.putExtra(CORRECTAS, gameModel.getAnsweredQuestion)
+            act4.putExtra(HINTS, gameModel.getHints)
             startActivity(act4)
 
         }
@@ -214,6 +228,7 @@ class GameActivity : AppCompatActivity() {
                         txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
                         break
                     }
+                    gameModel.popScore()
                 }
             }
 

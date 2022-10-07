@@ -14,6 +14,8 @@ class GameModel : ViewModel() {
     private var questionsAnswered = 0
     private var hintsRemaining = 5
 
+    private var consecutiveAnswersCorrectly = 0
+
     init {
         allQuestions.add(
             Question(
@@ -254,6 +256,12 @@ class GameModel : ViewModel() {
         return questionAnswers[currentQuestionIndex]
     }
 
+    val getAnsweredQuestion: Int
+        get() = questionsAnswered
+
+    val getScore: Int
+        get()= score
+
     val TotalNumberOfQuestions: Int
         get() = NumberOfQuestions
 
@@ -272,14 +280,26 @@ class GameModel : ViewModel() {
     val isEmpty: Boolean
          get() = gameQuestions.size == 0
 
-
     val getHints: Int
         get() = hintsRemaining
+
+    val getConsecutiveAnswersCorrectly : Int
+        get() = consecutiveAnswersCorrectly
+
+    fun addConsecutiveAnswerCorrectly(){
+        consecutiveAnswersCorrectly++
+    }
+    fun restartConsecutiveAnsweredCorrectly(){
+        consecutiveAnswersCorrectly = 0
+    }
 
     fun useHint(){
         if (hintsRemaining >= 1) {
             hintsRemaining -= 1
         }
+    }
+    fun addHint(){
+        hintsRemaining++
     }
 
     fun nextQuestion(){
@@ -298,6 +318,9 @@ class GameModel : ViewModel() {
     fun Answer(){
         questionsAnswered++
     }
+
+    fun addScore(){ score+=100}
+    fun popScore(){ if(getScore>0) score-=20 }
 
     val IsFinished: Boolean
         get() = questionsAnswered == gameQuestions.size
