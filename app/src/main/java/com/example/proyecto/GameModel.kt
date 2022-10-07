@@ -10,9 +10,11 @@ class GameModel : ViewModel() {
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
     var gameDifficulty = 0
-    var score = 0
+    private var gameDifficultyString = ""
+    private var score = 0
     private var questionsAnswered = 0
     private var hintsRemaining = 5
+    private var hintsUsed = 0
 
     private var consecutiveAnswersCorrectly = 0
 
@@ -255,6 +257,12 @@ class GameModel : ViewModel() {
     fun GetQuestionAnswers(): List<String> {
         return questionAnswers[currentQuestionIndex]
     }
+    fun getDifficultyString(): String{
+        if (gameDifficulty==1){ return "Fácil" }
+        if (gameDifficulty==2){ return "Normal" }
+        if (gameDifficulty==3){ return "Difícil" }
+        return ""
+    }
 
     val getAnsweredQuestion: Int
         get() = questionsAnswered
@@ -283,6 +291,9 @@ class GameModel : ViewModel() {
     val getHints: Int
         get() = hintsRemaining
 
+    val getHintsUsed: Int
+        get() = hintsUsed
+
     val getConsecutiveAnswersCorrectly : Int
         get() = consecutiveAnswersCorrectly
 
@@ -296,6 +307,8 @@ class GameModel : ViewModel() {
     fun useHint(){
         if (hintsRemaining >= 1) {
             hintsRemaining -= 1
+            hintsUsed++
+            score-=20
         }
     }
     fun addHint(){
@@ -320,7 +333,6 @@ class GameModel : ViewModel() {
     }
 
     fun addScore(){ score+=100}
-    fun popScore(){ if(getScore>0) score-=20 }
 
     val IsFinished: Boolean
         get() = questionsAnswered == gameQuestions.size

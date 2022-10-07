@@ -33,7 +33,7 @@ class ResultsActivity : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             txtPuntuacion.text = "Puntaje: ${extras.getInt(SCORE)}"
-            txtDificultad.text = "Dificultad: ${extras.getInt(DIFICULTY)}"
+            txtDificultad.text = "Dificultad: ${extras.getString(DIFICULTY)}"
             txtCorrectas.text = "Correctas: ${extras.getInt(CORRECTAS)}"
             txtHintsUsadas.text = "Pistas Usadas: ${extras.getInt(HINTS)}"
         }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
@@ -116,9 +117,9 @@ class GameActivity : AppCompatActivity() {
         btnFinish.setOnClickListener {
             val act4 = Intent(this,ResultsActivity::class.java)
             act4.putExtra(SCORE, gameModel.getScore)
-            act4.putExtra(DIFICULTY, gameModel.gameDifficulty)
+            act4.putExtra(DIFICULTY, gameModel.getDifficultyString())
             act4.putExtra(CORRECTAS, gameModel.getAnsweredQuestion)
-            act4.putExtra(HINTS, gameModel.getHints)
+            act4.putExtra(HINTS, gameModel.getHintsUsed)
             startActivity(act4)
 
         }
@@ -212,25 +213,29 @@ class GameActivity : AppCompatActivity() {
         }
 
         btnHint.setOnClickListener{
-            for(i in 0..gameModel.gameDifficulty){
-                if(gameModel.getHints > 0){
-                    if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
-                        buttons[i].performClick()
-                        gameModel.useHint()
-                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
-                        break
+            if(!gameModel.currentQuestion.answered){
+                for(i in 0..gameModel.gameDifficulty){
+                    if(gameModel.getHints > 0){
+                        if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){
+                            buttons[i].performClick()
+                            gameModel.useHint()
+                            txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                            break
+                        }
+                        if (buttons[i].text != gameModel.currentQuestionAnswer && buttons[i].isClickable && preguntasElim > 0){
+                            preguntasElim -= 1
+                            buttons[i].isClickable = false
+                            buttons[i].setBackgroundColor(Color.parseColor("#444444"))
+                            gameModel.useHint()
+                            txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+                            break
+                        }
                     }
-                    if (buttons[i].text != gameModel.currentQuestionAnswer && buttons[i].isClickable && preguntasElim > 0){
-                        preguntasElim -= 1
-                        buttons[i].isClickable = false
-                        buttons[i].setBackgroundColor(Color.parseColor("#444444"))
-                        gameModel.useHint()
-                        txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
-                        break
-                    }
-                    gameModel.popScore()
                 }
+            }else{
+                Toast.makeText(this, "Ya has contestado esta pregunta", Toast.LENGTH_SHORT).show()
             }
+
 
         }
 
