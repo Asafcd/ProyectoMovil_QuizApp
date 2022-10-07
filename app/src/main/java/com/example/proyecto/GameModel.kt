@@ -10,9 +10,9 @@ class GameModel : ViewModel() {
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
     var gameDifficulty = 0
-    private var gameDifficultyString = ""
     private var score = 0
     private var questionsAnswered = 0
+    private var questionsAnsweredCorrectly = 0
     private var hintsRemaining = 5
     private var hintsUsed = 0
 
@@ -264,6 +264,9 @@ class GameModel : ViewModel() {
         return ""
     }
 
+    val getQuestionsAnsweredCorrectly: Int
+        get() = questionsAnsweredCorrectly
+
     val getAnsweredQuestion: Int
         get() = questionsAnswered
 
@@ -296,6 +299,10 @@ class GameModel : ViewModel() {
 
     val getConsecutiveAnswersCorrectly : Int
         get() = consecutiveAnswersCorrectly
+
+    fun addQuestionAnsweredCorrectly(){
+        questionsAnsweredCorrectly++
+    }
 
     fun addConsecutiveAnswerCorrectly(){
         consecutiveAnswersCorrectly++

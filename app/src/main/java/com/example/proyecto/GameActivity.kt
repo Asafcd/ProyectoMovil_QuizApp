@@ -81,10 +81,8 @@ class GameActivity : AppCompatActivity() {
                     for (btn in buttons) {
                         if (btn.text != gameModel.currentQuestionAnswer) {
                             btn.setTextColor(Color.parseColor("#FFFFFF"))
-
                         } else {
                             btn.setBackgroundColor(Color.parseColor("#008000"))
-                            gameModel.addScore()
                         }
                         btn.isClickable = false
 
@@ -102,6 +100,8 @@ class GameActivity : AppCompatActivity() {
                     } else {
                         button.setBackgroundColor(Color.parseColor("#008000"))
                         button.setTextColor(Color.parseColor("#FFFFFF"))
+                        gameModel.addScore()
+                        gameModel.addQuestionAnsweredCorrectly()
                         if(gameModel.getConsecutiveAnswersCorrectly<2) gameModel.addConsecutiveAnswerCorrectly()
 
                         if(gameModel.getConsecutiveAnswersCorrectly == 2){
@@ -118,7 +118,7 @@ class GameActivity : AppCompatActivity() {
             val act4 = Intent(this,ResultsActivity::class.java)
             act4.putExtra(SCORE, gameModel.getScore)
             act4.putExtra(DIFICULTY, gameModel.getDifficultyString())
-            act4.putExtra(CORRECTAS, gameModel.getAnsweredQuestion)
+            act4.putExtra(CORRECTAS, gameModel.getQuestionsAnsweredCorrectly)
             act4.putExtra(HINTS, gameModel.getHintsUsed)
             startActivity(act4)
 
