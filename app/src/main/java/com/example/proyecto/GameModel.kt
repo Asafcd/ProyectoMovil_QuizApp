@@ -337,6 +337,7 @@ class GameModel : ViewModel() {
             hintsRemaining -= 1
             hintsUsed++
             score-=20
+            consecutiveAnswersCorrectly = 0
             if(!gameQuestions[currentQuestionIndex].hintsUsed){
                 gameQuestions[currentQuestionIndex].question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
                 gameQuestions[currentQuestionIndex].hintsUsed = true
