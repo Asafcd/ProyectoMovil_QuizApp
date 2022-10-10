@@ -26,7 +26,8 @@ class GameModel : ViewModel() {
                 listOf("1,845 km2", "2,172 km2", "937 km2"),
                 "Geografía",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -36,7 +37,8 @@ class GameModel : ViewModel() {
                 listOf("Colima", "Tlaxcala", "Morelos"),
                 "Geografía",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -46,7 +48,8 @@ class GameModel : ViewModel() {
                 listOf("Baja California Sur", "California", "Sonora"),
                 "Geografía",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -56,7 +59,8 @@ class GameModel : ViewModel() {
                 listOf("Nilo", "Mississippi", "Congo"),
                 "Geografía",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -66,7 +70,8 @@ class GameModel : ViewModel() {
                 listOf("7", "2", "4"),
                 "Geografía",
                 false,
-                ""
+                "",
+                false
             )
         )
 
@@ -77,7 +82,8 @@ class GameModel : ViewModel() {
                 listOf("Locke", "Socrates", "Platón"),
                 "Cultura General",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -87,7 +93,8 @@ class GameModel : ViewModel() {
                 listOf("La muralla china", "Chichen Itzá", "Las pirámides de Giza"),
                 "Cultura General",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -97,7 +104,8 @@ class GameModel : ViewModel() {
                 listOf("1576", "1824", "1342"),
                 "Cultura General",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -107,7 +115,8 @@ class GameModel : ViewModel() {
                 listOf("2 - 4 L", "7+ L", "5 - 7 L"),
                 "Cultura General",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -117,7 +126,8 @@ class GameModel : ViewModel() {
                 listOf("África", "Asia", "Europa"),
                 "Cultura General",
                 false,
-                ""
+                "",
+                false
             )
         )
 
@@ -128,7 +138,8 @@ class GameModel : ViewModel() {
                 listOf("9", "12", "17"),
                 "Animales",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -138,7 +149,8 @@ class GameModel : ViewModel() {
                 listOf("Mamífero", "Anfibio", "Reptil"),
                 "Animales",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -148,7 +160,8 @@ class GameModel : ViewModel() {
                 listOf("Mamíferos", "Anfibios", "Peces"),
                 "Animales",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -158,7 +171,8 @@ class GameModel : ViewModel() {
                 listOf("Insectos", "Gusanos", "Moluscos"),
                 "Animales",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -168,7 +182,8 @@ class GameModel : ViewModel() {
                 listOf("Insectos", "Crustaceos", "Poríferos"),
                 "Animales",
                 false,
-                ""
+                "",
+                false
             )
         )
 
@@ -179,7 +194,8 @@ class GameModel : ViewModel() {
                 listOf("Zelda", "Ganondorf", "Impa"),
                 "Videojuegos",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -189,7 +205,8 @@ class GameModel : ViewModel() {
                 listOf("Tetris", "Super Mario", "Pokemon Red/Blue"),
                 "Videojuegos",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -199,7 +216,8 @@ class GameModel : ViewModel() {
                 listOf("Zelda", "Ganondorf", "Impa"),
                 "Videojuegos",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -209,7 +227,8 @@ class GameModel : ViewModel() {
                 listOf("Super Mario Bros", "Super Smash Brothers 64", "The Legend of Zelda"),
                 "Videojuegos",
                 false,
-                ""
+                "",
+                false
             )
         )
         allQuestions.add(
@@ -219,7 +238,8 @@ class GameModel : ViewModel() {
                 listOf("Tetris", "Pac-man", "Sonic"),
                 "Videojuegos",
                 false,
-                ""
+                "",
+                false
             )
         )
 
@@ -299,7 +319,8 @@ class GameModel : ViewModel() {
 
     val getConsecutiveAnswersCorrectly : Int
         get() = consecutiveAnswersCorrectly
-
+    val questionHints: Boolean
+        get() = gameQuestions[currentQuestionIndex].hintsUsed
     fun addQuestionAnsweredCorrectly(){
         questionsAnsweredCorrectly++
     }
@@ -316,9 +337,11 @@ class GameModel : ViewModel() {
             hintsRemaining -= 1
             hintsUsed++
             score-=20
-            consecutiveAnswersCorrectly = -1
-            gameQuestions[currentQuestionIndex].question = "${gameQuestions[currentQuestionIndex].question}(Pista Utilizada)"
+            if(!gameQuestions[currentQuestionIndex].hintsUsed){
+                gameQuestions[currentQuestionIndex].question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
+                gameQuestions[currentQuestionIndex].hintsUsed = true
 
+            }
         }
     }
     fun addHint(){
