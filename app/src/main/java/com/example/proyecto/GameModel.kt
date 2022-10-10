@@ -316,6 +316,9 @@ class GameModel : ViewModel() {
             hintsRemaining -= 1
             hintsUsed++
             score-=20
+            consecutiveAnswersCorrectly = -1
+            gameQuestions[currentQuestionIndex].question = "${gameQuestions[currentQuestionIndex].question}(Pista Utilizada)"
+
         }
     }
     fun addHint(){
