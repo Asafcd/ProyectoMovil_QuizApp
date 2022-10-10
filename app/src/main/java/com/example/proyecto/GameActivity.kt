@@ -101,11 +101,10 @@ class GameActivity : AppCompatActivity() {
                         button.setBackgroundColor(Color.parseColor("#008000"))
                         button.setTextColor(Color.parseColor("#FFFFFF"))
                         gameModel.addScore()
+                        gameModel.addQuestionAnsweredCorrectly()
                         if(!gameModel.questionHints) {
-                            gameModel.addQuestionAnsweredCorrectly()
+                            if(gameModel.getConsecutiveAnswersCorrectly<2) gameModel.addConsecutiveAnswerCorrectly()
                         }
-                        if(gameModel.getConsecutiveAnswersCorrectly<2) gameModel.addConsecutiveAnswerCorrectly()
-
                         if(gameModel.getConsecutiveAnswersCorrectly == 2){
                             gameModel.addHint()
                             txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
