@@ -9,7 +9,6 @@ import android.widget.Spinner
 import android.widget.Toast
 
 
-val DIFICULTY = "DIFICULTY"
 class MainMenuActivity : AppCompatActivity() {
 
     private lateinit var spin: Spinner
@@ -20,17 +19,17 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_menu)
 
-        spin = findViewById(R.id.spinner)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.Dificultad,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spin.adapter = adapter
-        }
+//        spin = findViewById(R.id.spinner)
+//        ArrayAdapter.createFromResource(
+//            this,
+//            R.array.Dificultad,
+//            android.R.layout.simple_spinner_item
+//        ).also { adapter ->
+//            // Specify the layout to use when the list of choices appears
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            // Apply the adapter to the spinner
+//            spin.adapter = adapter
+//        }
 
         btn_opciones = findViewById<Button>(R.id.btn_opciones)
         btn_opciones.setOnClickListener {
@@ -40,8 +39,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         btn_jugar = findViewById<Button>(R.id.btn_Jugar)
         btn_jugar.setOnClickListener {
-            val act3 = Intent(this,GameActivity::class.java)
-            act3.putExtra(DIFICULTY, spin.selectedItemPosition + 1)
+            val act3 = Intent(this,OptionsMenuActivity::class.java)
             startActivity(act3)
         }
 
