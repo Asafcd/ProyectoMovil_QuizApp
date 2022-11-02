@@ -12,7 +12,7 @@ class GameModel : ViewModel() {
     private var score = 0
     private var questionsAnswered = 0
     private var questionsAnsweredCorrectly = 0
-    private var hintsRemaining = 5
+    private var hintsRemaining = 0
     private var hintsUsed = 0
 
     private var consecutiveAnswersCorrectly = 0
@@ -290,7 +290,9 @@ class GameModel : ViewModel() {
         }
         NumberOfQuestions = gameQuestions.size
     }
-
+    fun setHints(num: Int){
+        hintsRemaining = num
+    }
     fun GetQuestionAnswers(): List<String> {
         return questionAnswers[currentQuestionIndex]
     }
