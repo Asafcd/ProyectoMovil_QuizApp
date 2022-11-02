@@ -4,9 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity (tableName = "Answer")
+@Entity (tableName = "answers")
 data class Answer(
-    @PrimaryKey val id: Int,
+    @PrimaryKey (autoGenerate = true)
+    val answerId: Int,
+    val questionId: Int,
     val content: String,
     val correct: Boolean
 )

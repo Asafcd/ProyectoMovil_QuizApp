@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 
 val SCORE = "SCORE"
 val CORRECTAS = "CORRECTAS"
@@ -34,6 +35,8 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game)
 
+        var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").build()
+
         val gameModel: GameModel by viewModels()
 
         txtQuestion = findViewById(R.id.txt_pregunta)
@@ -55,14 +58,17 @@ class GameActivity : AppCompatActivity() {
         val buttons = listOf<Button>(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
 
         if (gameModel.isEmpty) {
-            gameModel.GetRandomQuestions(gameModel.gameDifficulty)
+            gameModel.GetRandomQuestions(gameModel.gameDifficulty, db.gameDao().GetAllQuesitonsWithAnswers())
+
+
+
         }
 
         txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
 
         txtQuestion.text = "${gameModel.currentQuestion.question}"
 
-        txtSubject.text = gameModel.currentQuestion.topic
+        txtSubject.text = gameModel.currentQuestion.question.topic
         txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
 
         val answers = gameModel.GetQuestionAnswers()
@@ -87,8 +93,8 @@ class GameActivity : AppCompatActivity() {
                         btn.isClickable = false
 
                     }
-                    gameModel.currentQuestion.selected = button.text.toString()
-                    gameModel.currentQuestion.answered = true
+                    gameModel.currentQuestion.question.selected = button.text.toString()
+                    gameModel.currentQuestion.question.answered = true
                     gameModel.Answer()
                     if (gameModel.IsFinished)
                     {
@@ -130,7 +136,7 @@ class GameActivity : AppCompatActivity() {
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
-            txtSubject.text = gameModel.currentQuestion.topic
+            txtSubject.text = gameModel.currentQuestion.question.topic
 
             val answers = gameModel.GetQuestionAnswers()
 
@@ -138,7 +144,7 @@ class GameActivity : AppCompatActivity() {
                 buttons[i].visibility = View.GONE;
             }
 
-            if (!gameModel.currentQuestion.answered) {
+            if (!gameModel.currentQuestion.question.answered) {
                 for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].text = answers[i]
                     buttons[i].setBackgroundColor(Color.parseColor("#000000"))
@@ -152,12 +158,12 @@ class GameActivity : AppCompatActivity() {
                     buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
-                    if (buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
+                    if (buttons[i].text == gameModel.currentQuestion.question.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
                         buttons[i].setBackgroundColor(Color.parseColor("#008000"))
                     } else {
                         if (buttons[i].text == gameModel.currentQuestionAnswer)
                             buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                        if (buttons[i].text == gameModel.currentQuestion.selected) {
+                        if (buttons[i].text == gameModel.currentQuestion.question.selected) {
                             buttons[i].setBackgroundColor(Color.parseColor("#FF0000"))
                         }
 
@@ -173,7 +179,7 @@ class GameActivity : AppCompatActivity() {
             txtQuestion.text = gameModel.currentQuestionText
             txtQuestionNumber.text =
                 "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
-            txtSubject.text = gameModel.currentQuestion.topic
+            txtSubject.text = gameModel.currentQuestion.question.topic
 
             val answers = gameModel.GetQuestionAnswers()
 
@@ -181,7 +187,7 @@ class GameActivity : AppCompatActivity() {
                 buttons[i].visibility = View.GONE;
             }
 
-            if (!gameModel.currentQuestion.answered) {
+            if (!gameModel.currentQuestion.question.answered) {
                 for (i in 0..gameModel.gameDifficulty) {
                     buttons[i].text = answers[i]
 
@@ -197,12 +203,12 @@ class GameActivity : AppCompatActivity() {
                     buttons[i].setTextColor(Color.parseColor("#FFFFFF"))
                     buttons[i].text = answers[i]
                     buttons[i].isClickable = false
-                    if (buttons[i].text == gameModel.currentQuestion.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
+                    if (buttons[i].text == gameModel.currentQuestion.question.selected && buttons[i].text == gameModel.currentQuestionAnswer) {
                         buttons[i].setBackgroundColor(Color.parseColor("#008000"))
                     } else {
                         if (buttons[i].text == gameModel.currentQuestionAnswer)
                             buttons[i].setBackgroundColor(Color.parseColor("#008000"))
-                        if (buttons[i].text == gameModel.currentQuestion.selected) {
+                        if (buttons[i].text == gameModel.currentQuestion.question.selected) {
                             buttons[i].setBackgroundColor(Color.parseColor("#FF0000"))
                         }
 
@@ -214,7 +220,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         btnHint.setOnClickListener{
-            if(!gameModel.currentQuestion.answered){
+            if(!gameModel.currentQuestion.question.answered){
                 for(i in 0..gameModel.gameDifficulty){
                     if(gameModel.getHints > 0){
                         if (buttons[i].text == gameModel.currentQuestionAnswer && preguntasElim == 0){

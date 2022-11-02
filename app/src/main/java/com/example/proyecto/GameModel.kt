@@ -1,11 +1,10 @@
 package com.example.proyecto
 
 import androidx.lifecycle.ViewModel
-import kotlin.random.Random
 
 class GameModel : ViewModel() {
-    private var allQuestions = mutableListOf<Question>()
-    private var gameQuestions = mutableListOf<Question>()
+    private var allQuestions = mutableListOf<QuestionWithAnswers>()
+    private var gameQuestions = mutableListOf<QuestionWithAnswers>()
     private var NumberOfQuestions = 0
     private var currentQuestionIndex = 0
     private var questionAnswers = mutableListOf<List<String>>()
@@ -17,6 +16,10 @@ class GameModel : ViewModel() {
     private var hintsUsed = 0
 
     private var consecutiveAnswersCorrectly = 0
+
+
+
+
 /*
     init {
         allQuestions.add(
@@ -211,20 +214,21 @@ class GameModel : ViewModel() {
         )
         allQuestions.add(
             Question(
-                "¿Quién es el protagonista de 'The Legend of Zelda'?",
-                "Link",
-                listOf("Zelda", "Ganondorf", "Impa"),
+                "¿En cuál fue el primer juego en donde apareció el personaje 'Mario'?",
+                "Donkey Kong",
+                listOf("Super Mario Bros", "Super Smash Brothers 64", "The Legend of Zelda"),
                 "Videojuegos",
                 false,
                 "",
                 false
             )
         )
+
         allQuestions.add(
             Question(
-                "¿En cuál fue el primer juego en donde apareció el personaje 'Mario'?",
-                "Donkey Kong",
-                listOf("Super Mario Bros", "Super Smash Brothers 64", "The Legend of Zelda"),
+                "¿Cuántos luchadores hay en Street Fighter II?",
+                "12",
+                listOf("8", "10", "16"),
                 "Videojuegos",
                 false,
                 "",
@@ -245,28 +249,41 @@ class GameModel : ViewModel() {
 
     }
 */
-    fun GetRandomQuestions(difficulty: Int) {
+
+
+
+
+    fun GetRandomQuestions(difficulty: Int, questions: List<QuestionWithAnswers>) {
+
+
+        allQuestions.addAll(questions)
 
         for (i in 0 ..9){
             //val randInt = Random.nextInt(allQuestions.size)
             //var question = allQuestions[randInt]
             //gameQuestions.add(question)
             allQuestions.shuffle()
-            var question = allQuestions.random()
-            while (gameQuestions.indexOf(question) != -1){
+            var question: QuestionWithAnswers = allQuestions.random()
+            while (gameQuestions.contains(question)){
                 question = allQuestions.random()
             }
             gameQuestions.add(question)
 
             var answers = mutableListOf<String>()
-            answers.add(question.answer)
-            var wrongAnswer = question.wrong_answers.random()
-            answers.add(wrongAnswer)
-            for (i in 2..difficulty) {
-                while (answers.indexOf(wrongAnswer) != -1) {
-                    wrongAnswer = question.wrong_answers.random()
+
+            for (ans in question.answers){
+                if (ans.correct){
+                    answers.add(ans.content)
                 }
-                answers.add(wrongAnswer)
+            }
+
+            var wrongAnswer = question.answers.random()
+            answers.add(wrongAnswer.content)
+            for (i in 2..difficulty) {
+                while (answers.indexOf(wrongAnswer.content) != -1) {
+                    wrongAnswer = question.answers.random()
+                }
+                answers.add(wrongAnswer.content)
             }
             answers.shuffle()
             questionAnswers.add(answers)
@@ -298,15 +315,15 @@ class GameModel : ViewModel() {
     val TotalNumberOfQuestions: Int
         get() = NumberOfQuestions
 
-    val currentQuestion: Question
+    val currentQuestion: QuestionWithAnswers
         get() = gameQuestions[currentQuestionIndex]
 
     val currentQuestionText: String
-        get() = gameQuestions[currentQuestionIndex].question
-/*
-    val currentQuestionAnswer: String
-        get() = gameQuestions[currentQuestionIndex].answer
-*/
+        get() = gameQuestions[currentQuestionIndex].question.question
+
+    val currentQuestionAnswer: String?
+        get() = getCorrectAnswer(gameQuestions[currentQuestionIndex])
+
     val questionNumber: Int
         get() = currentQuestionIndex +1
 
@@ -322,7 +339,7 @@ class GameModel : ViewModel() {
     val getConsecutiveAnswersCorrectly : Int
         get() = consecutiveAnswersCorrectly
     val questionHints: Boolean
-        get() = gameQuestions[currentQuestionIndex].hintsUsed
+        get() = gameQuestions[currentQuestionIndex].question.hintsUsed
     fun addQuestionAnsweredCorrectly(){
         questionsAnsweredCorrectly++
     }
@@ -340,9 +357,9 @@ class GameModel : ViewModel() {
             hintsUsed++
             score-=20
             consecutiveAnswersCorrectly = 0
-            if(!gameQuestions[currentQuestionIndex].hintsUsed){
-                gameQuestions[currentQuestionIndex].question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
-                gameQuestions[currentQuestionIndex].hintsUsed = true
+            if(!gameQuestions[currentQuestionIndex].question.hintsUsed){
+                gameQuestions[currentQuestionIndex].question.question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
+                gameQuestions[currentQuestionIndex].question.hintsUsed = true
 
             }
         }
@@ -372,4 +389,15 @@ class GameModel : ViewModel() {
 
     val IsFinished: Boolean
         get() = questionsAnswered == gameQuestions.size
+
+    fun getCorrectAnswer(questionWithAnswers: QuestionWithAnswers): String?{
+        for (ans in questionWithAnswers.answers)
+        {
+            if (ans.correct)
+            {
+                return ans.content
+            }
+        }
+        return ""
+    }
 }

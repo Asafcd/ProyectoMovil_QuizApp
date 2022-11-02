@@ -8,10 +8,12 @@ import androidx.room.PrimaryKey
 
 @Entity (tableName = "games")
 data class Game(
-    @PrimaryKey var gameId: Int,
+    @PrimaryKey (autoGenerate = true)
+    var gameId: Int,
     val score: Double,
     val finished: Boolean,
     @ColumnInfo (name = "hints_enabled") val hintsEnabled: Boolean,
     val difficulty: Int,
-    @ColumnInfo (name = "hints_availble") val hintsAvailable: Int,
-    val player: String)
+    @ColumnInfo (name = "hints_available") val hintsAvailable: Int,
+    val player: String,
+    val isStarted: Boolean)
