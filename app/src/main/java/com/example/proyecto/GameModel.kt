@@ -17,7 +17,7 @@ class GameModel : ViewModel() {
     private var hintsUsed = 0
 
     private var consecutiveAnswersCorrectly = 0
-
+/*
     init {
         allQuestions.add(
             Question(
@@ -244,7 +244,7 @@ class GameModel : ViewModel() {
         )
 
     }
-
+*/
     fun GetRandomQuestions(difficulty: Int) {
 
         for (i in 0 ..9){
@@ -301,10 +301,10 @@ class GameModel : ViewModel() {
 
     val currentQuestionText: String
         get() = gameQuestions[currentQuestionIndex].question
-
+/*
     val currentQuestionAnswer: String
         get() = gameQuestions[currentQuestionIndex].answer
-
+*/
     val questionNumber: Int
         get() = currentQuestionIndex +1
 
