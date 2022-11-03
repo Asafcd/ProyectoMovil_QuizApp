@@ -40,5 +40,11 @@ interface GameDao {
     @Query("SELECT * FROM answers WHERE questionId = :questionId ")
     fun getAnswersForQuestion(questionId: Int): List<Answer>
 
+    @Transaction
+    @Query("SELECT Finished FROM games WHERE gameId=(SELECT max(gameId) FROM games) ")
+    fun isFinished(): Boolean
+
+
+
 
 }
