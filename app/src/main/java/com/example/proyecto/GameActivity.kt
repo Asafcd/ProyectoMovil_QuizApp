@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.room.Room
 
 
@@ -55,6 +56,20 @@ class GameActivity : AppCompatActivity() {
         val buttons = listOf<Button>(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
 
         if (gameModel.isEmpty) {
+
+            var gameData = db.gameDao().getLastUnfinishedGame()
+            gameModel.gameDifficulty = gameData.difficulty
+            gameModel.score = gameData.score.toInt()
+            if (!gameData.hintsEnabled){
+                btnHint.isEnabled = false
+                txtRemainingHints.isVisible = false
+            }
+            gameModel.hintsRemaining = gameData.hintsAvailable
+            gameModel.NumberOfQuestions = db.gameDao().getNumberOfQuestionsByGameId(gameData.gameId)
+
+
+
+
             gameModel.GetRandomQuestions(gameModel.gameDifficulty, db.gameDao().GetAllQuesitonsWithAnswers())
         }
 

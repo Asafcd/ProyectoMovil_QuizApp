@@ -3,17 +3,17 @@ package com.example.proyecto
 import androidx.lifecycle.ViewModel
 
 class GameModel : ViewModel() {
-    private var allQuestions = mutableListOf<QuestionWithAnswers>()
-    private var gameQuestions = mutableListOf<QuestionWithAnswers>()
-    private var NumberOfQuestions = 0
-    private var currentQuestionIndex = 0
-    private var questionAnswers = mutableListOf<List<String>>()
+     var allQuestions = mutableListOf<QuestionWithAnswers>()
+     var gameQuestions = mutableListOf<QuestionWithAnswers>()
+     var NumberOfQuestions = 0
+     var currentQuestionIndex = 0
+     var questionAnswers = mutableListOf<List<String>>()
     var gameDifficulty = 0
-    private var score = 0
-    private var questionsAnswered = 0
-    private var questionsAnsweredCorrectly = 0
-    private var hintsRemaining = 0
-    private var hintsUsed = 0
+     var score = 0
+     var questionsAnswered = 0
+     var questionsAnsweredCorrectly = 0
+     var hintsRemaining = 0
+     var hintsUsed = 0
 
     private var consecutiveAnswersCorrectly = 0
 
