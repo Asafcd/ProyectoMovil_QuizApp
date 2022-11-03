@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.ColumnInfo
+import androidx.room.Room
 import com.google.android.material.slider.Slider
 
 val DIFICULTY = "DIFICULTY"
@@ -30,6 +32,8 @@ class OptionsMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.option_menu)
+
+        var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
         dificulty = findViewById(R.id.spinner)
         ArrayAdapter.createFromResource(
             this,
@@ -41,7 +45,18 @@ class OptionsMenuActivity : AppCompatActivity() {
             // Apply the adapter to the spinner
             dificulty.adapter = adapter
         }
-        hintsActive = findViewById(R.id.simpleSwitch)
+        dificulty = findViewById(R.id.spinner)
+        hintsActive = findViewById(R.id.Switch)
+        todos = findViewById(R.id.CbTemaTodos)
+        geografia = findViewById(R.id.CbTema1)
+        cultGen = findViewById(R.id.CbTema2)
+        animales = findViewById(R.id.CbTema3)
+        videojuegos = findViewById(R.id.CbTema4)
+        peliculas = findViewById(R.id.CbTema5)
+        numHints = findViewById(R.id.sliderPistas)
+        numQuestions = findViewById(R.id.slider)
+
+
         btn_iniciar = findViewById<Button>(R.id.btn_iniciar)
         btn_iniciar.setOnClickListener {
             val act3 = Intent(this,GameActivity::class.java)
@@ -52,15 +67,35 @@ class OptionsMenuActivity : AppCompatActivity() {
                 act3.putExtra(HINTS, 0)
             }
             act3.putExtra(DIFICULTY, dificulty.selectedItemPosition+1)
-            act3.putExtra(QUESTIONS, numQuestions.value)
+            act3.putExtra(QUESTIONS, numQuestions.value.toInt())
             val topics = listOf<Boolean>()
             val extras = Bundle()
+            var strings = arrayOf("")
             if(todos.isChecked){
-                extras.putBooleanArray("topics", booleanArrayOf(true,true,true,true,true))
+                extras.putStringArray("topics", arrayOf<String>("Geografía","Cultura General","Animales","Videojuegos","Películas"))
             }
             else{
-                extras.putBooleanArray("topics", booleanArrayOf(geografia.isChecked,cultGen.isChecked,animales.isChecked,videojuegos.isChecked,peliculas.isChecked))
+                if(geografia.isChecked){
+                    strings[-1] = "Geografia"
+                }
+                if(cultGen.isChecked){
+                    strings[-1] = "Cultura General"
+                }
+                if(animales.isChecked){
+                    strings[-1] = "Animales"
+                }
+                if(videojuegos.isChecked){
+                    strings[-1] = "Videojuegos"
+                }
+                if(peliculas.isChecked){
+                    strings[-1] = "Películas"
+                }
+                extras.putStringArray("topics", strings)
             }
+
+//            val game = Game(0,0.0,false,hintsActive.isChecked, dificulty.selectedItemPosition+1, numHints.value.toInt(),"FRN",true)
+            db.gameDao().AddGame(0.0, false,hintsActive.isChecked, dificulty.selectedItemPosition+1, numHints.value.toInt(),"FRN",true)
+
             act3.putExtra(TOPICS, extras)
             startActivity(act3)
         }
@@ -71,3 +106,11 @@ class OptionsMenuActivity : AppCompatActivity() {
         }
     }
 }
+
+//val score: Double,
+//val finished: Boolean,
+//@ColumnInfo(name = "hints_enabled") val hintsEnabled: Boolean,
+//val difficulty: Int,
+//@ColumnInfo(name = "hints_available") val hintsAvailable: Int,
+//val player: String,
+//val isStarted: Boolean)

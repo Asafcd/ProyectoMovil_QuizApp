@@ -44,7 +44,21 @@ interface GameDao {
     @Query("SELECT Finished FROM games WHERE gameId=(SELECT max(gameId) FROM games) ")
     fun isFinished(): Boolean
 
+    @Transaction
+    @Query("SELECT count(1) WHERE exists (SELECT * FROM games) ")
+    fun Size(): Int
 
+    @Transaction
+    @Query("INSERT INTO games(score,finished,hints_enabled,difficulty,hints_available,player,isStarted) values(:score,:finished,:hintsEnabled, :difficulty, :hintsAvailable, :player, :isStarted)")
+    fun AddGame(score: Double, finished: Boolean, hintsEnabled: Boolean, difficulty: Int, hintsAvailable: Int, player: String, isStarted: Boolean)
 
 
 }
+
+//val score: Double,
+//val finished: Boolean,
+//@ColumnInfo(name = "hints_enabled") val hintsEnabled: Boolean,
+//val difficulty: Int,
+//@ColumnInfo(name = "hints_available") val hintsAvailable: Int,
+//val player: String,
+//val isStarted: Boolean)

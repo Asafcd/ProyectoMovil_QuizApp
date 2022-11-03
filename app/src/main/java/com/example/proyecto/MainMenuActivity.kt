@@ -35,7 +35,10 @@ class MainMenuActivity : AppCompatActivity() {
 //        }
 
         var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
-        var gameIsFinished: Boolean? = db.gameDao().isFinished()
+        var gameIsFinished = true
+//        if(db.gameDao().Size() > 0){
+//            var gameIsFinished: Boolean = db.gameDao().isFinished()
+//        }
         btn_jugar = findViewById<Button>(R.id.btn_Jugar)
         btn_jugar.setOnClickListener {
             val act2 = Intent(this,OptionsMenuActivity::class.java)
@@ -46,9 +49,9 @@ class MainMenuActivity : AppCompatActivity() {
             val act3 = Intent(this,GameActivity::class.java)
             startActivity(act3)
         }
-        if(gameIsFinished != null && gameIsFinished){
-            btn_continuar.isGone = true
-        }
+//        if(gameIsFinished){
+//            btn_continuar.isGone = true
+//        }
 
         btn_puntuaciones = findViewById<Button>(R.id.btn_Puntuaciones)
         btn_puntuaciones.setOnClickListener {
