@@ -18,6 +18,10 @@ interface GameDao {
     @Query("SELECT * FROM questions WHERE topic = :topic")
     fun GetQuestionsByTopic(topic: String): List<QuestionWithAnswers>
 
+    @Transaction
+    @Query("SELECT gameId, score FROM games ORDER BY score DESC LIMIT 5")
+    fun getGamesWithScore(): List<GameWithScore>
+
     @Insert
     fun AddQuestion(question: Question)
 
