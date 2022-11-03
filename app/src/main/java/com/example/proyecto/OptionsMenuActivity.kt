@@ -41,6 +41,7 @@ class OptionsMenuActivity : AppCompatActivity() {
             // Apply the adapter to the spinner
             dificulty.adapter = adapter
         }
+        hintsActive = findViewById(R.id.simpleSwitch)
         btn_iniciar = findViewById<Button>(R.id.btn_iniciar)
         btn_iniciar.setOnClickListener {
             val act3 = Intent(this,GameActivity::class.java)
