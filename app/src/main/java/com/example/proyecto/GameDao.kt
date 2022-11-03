@@ -14,8 +14,9 @@ interface GameDao {
     @Query("SELECT * FROM questions")
     fun GetAllQuesitonsWithAnswers(): List<QuestionWithAnswers>
 
+    @Transaction
     @Query("SELECT * FROM questions WHERE topic = :topic")
-    fun GetQuestionsByTopic(topic: String)
+    fun GetQuestionsByTopic(topic: String): List<QuestionWithAnswers>
 
     @Insert
     fun AddQuestion(question: Question)
@@ -37,7 +38,7 @@ interface GameDao {
 
     @Transaction
     @Query("SELECT * FROM answers WHERE questionId = :questionId ")
-    fun getAnswersForQuestion(questionId: Int)
+    fun getAnswersForQuestion(questionId: Int): List<Answer>
 
 
 }
