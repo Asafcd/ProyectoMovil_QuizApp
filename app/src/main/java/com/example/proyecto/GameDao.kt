@@ -36,7 +36,7 @@ interface GameDao {
     @Update
     fun UpdateQuestions(vararg questions: Question)
 
-    @Transaction
+
     @Query("SELECT * FROM answers WHERE questionId = :questionId ")
     fun getAnswersForQuestion(questionId: Int): List<Answer>
 
@@ -44,15 +44,18 @@ interface GameDao {
     @Query("SELECT Finished FROM games WHERE gameId=(SELECT max(gameId) FROM games) ")
     fun isFinished(): Boolean
 
-    @Transaction
-    @Query("SELECT count(1) WHERE exists (SELECT * FROM games) ")
+
+    @Query("SELECT count(gameId) FROM games")
     fun Size(): Int
 
-    @Transaction
     @Query("INSERT INTO games(score,finished,hints_enabled,difficulty,hints_available,player,isStarted) values(:score,:finished,:hintsEnabled, :difficulty, :hintsAvailable, :player, :isStarted)")
     fun AddGame(score: Double, finished: Boolean, hintsEnabled: Boolean, difficulty: Int, hintsAvailable: Int, player: String, isStarted: Boolean)
 
+    @Query("SELECT * FROM games ORDER BY gameId DESC LIMIT 1")
+    fun getLastUnfinishedGame(): Game
 
+    @Query("SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId")
+    fun getNumberOfQuestionsByGameId(gameId: Int): Int
 }
 
 //val score: Double,

@@ -3,6 +3,7 @@ package com.example.proyecto
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.ColumnInfo
 import androidx.room.Room
@@ -29,6 +30,7 @@ class OptionsMenuActivity : AppCompatActivity() {
     private lateinit var numQuestions: Slider
     private lateinit var hintsActive: Switch
     private lateinit var numHints: Slider
+    @RequiresApi(33)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.option_menu)
@@ -70,27 +72,30 @@ class OptionsMenuActivity : AppCompatActivity() {
             act3.putExtra(QUESTIONS, numQuestions.value.toInt())
             val topics = listOf<Boolean>()
             val extras = Bundle()
-            var strings = arrayOf("")
+            var strings = mutableListOf<String>()
             if(todos.isChecked){
                 extras.putStringArray("topics", arrayOf<String>("Geografía","Cultura General","Animales","Videojuegos","Películas"))
             }
             else{
                 if(geografia.isChecked){
-                    strings[-1] = "Geografia"
+                    strings.add("Geografia")
                 }
                 if(cultGen.isChecked){
-                    strings[-1] = "Cultura General"
+                    strings.add("Cultura General")
                 }
                 if(animales.isChecked){
-                    strings[-1] = "Animales"
+                    strings.add("Animales")
                 }
                 if(videojuegos.isChecked){
-                    strings[-1] = "Videojuegos"
+                    strings.add("Videojuegos")
                 }
                 if(peliculas.isChecked){
-                    strings[-1] = "Películas"
+                    strings.add("Películas")
                 }
-                extras.putStringArray("topics", strings)
+
+                var arr = strings.toTypedArray()
+
+                extras.putStringArray("topics", arr)
             }
 
 //            val game = Game(0,0.0,false,hintsActive.isChecked, dificulty.selectedItemPosition+1, numHints.value.toInt(),"FRN",true)
