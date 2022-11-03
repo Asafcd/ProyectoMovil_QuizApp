@@ -11,9 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 
-val SCORE = "SCORE"
-val CORRECTAS = "CORRECTAS"
-val HINTS = "HINTS"
 
 class GameActivity : AppCompatActivity() {
 
@@ -59,9 +56,6 @@ class GameActivity : AppCompatActivity() {
 
         if (gameModel.isEmpty) {
             gameModel.GetRandomQuestions(gameModel.gameDifficulty, db.gameDao().GetAllQuesitonsWithAnswers())
-
-
-
         }
 
         txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
