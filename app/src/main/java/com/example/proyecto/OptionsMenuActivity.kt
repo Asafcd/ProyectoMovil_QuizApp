@@ -93,13 +93,23 @@ class OptionsMenuActivity : AppCompatActivity() {
                     strings.add("Películas")
                 }
 
-                var arr = strings.toTypedArray()
+                //var arr = strings.toTypedArray()
 
-                extras.putStringArray("topics", arr)
+                //extras.putStringArray("topics", arr)
+
+
             }
 
 //            val game = Game(0,0.0,false,hintsActive.isChecked, dificulty.selectedItemPosition+1, numHints.value.toInt(),"FRN",true)
             db.gameDao().AddGame(0.0, false,hintsActive.isChecked, dificulty.selectedItemPosition+1, numHints.value.toInt(),"FRN",true)
+            val gameId = db.gameDao().getLastUnfinishedGameId()
+            val questionsFiltered = db.gameDao().GetQuestionsByTopics(strings)
+            questionsFiltered.shuffled()
+            //var questionsLimited = mutableListOf<QuestionWithAnswers>()
+            for(i in 0..numQuestions.value.toInt()-1){
+                //questionsLimited.add(questionsFiltered[i])
+                db.gameDao().addGameQuestions(gameId, questionsFiltered[i].question.questionId)
+            }
 
             act3.putExtra(TOPICS, extras)
             startActivity(act3)

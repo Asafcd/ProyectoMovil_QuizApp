@@ -67,10 +67,29 @@ class GameActivity : AppCompatActivity() {
             gameModel.hintsRemaining = gameData.hintsAvailable
             gameModel.NumberOfQuestions = db.gameDao().getNumberOfQuestionsByGameId(gameData.gameId)
 
+            var questions = db.gameDao().GetQuestionsByGameId(gameData.gameId)
 
+           for (question in questions){
+               gameModel.gameQuestions.add(question)
+               gameModel.questionAnswers
 
+               var answers = mutableListOf<String>()
 
-            gameModel.GetRandomQuestions(gameModel.gameDifficulty, db.gameDao().GetAllQuesitonsWithAnswers())
+               for (ans in question.answers){
+                   if (ans.correct){
+                       answers.add(ans.content)
+                   }
+               }
+               var wrongAnswer = question.answers.random()
+               for (i in 0..gameData.difficulty){
+                   while(answers.indexOf(wrongAnswer.content) != -1 && !wrongAnswer.correct){
+                       wrongAnswer = question.answers.random()
+                   }
+               }
+               answers.shuffle()
+               gameModel.questionAnswers.add(answers)
+           }
+            gameModel.NumberOfQuestions = gameModel.gameQuestions.size
         }
 
         txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
@@ -135,7 +154,7 @@ class GameActivity : AppCompatActivity() {
             act4.putExtra(SCORE, gameModel.getScore)
             act4.putExtra(DIFICULTY, gameModel.getDifficultyString())
             act4.putExtra(CORRECTAS, gameModel.getQuestionsAnsweredCorrectly)
-            act4.putExtra(HINTS, gameModel.getHintsUsed)
+            //act4.putExtra(HINTS, gameModel.getHintsUsed)
             startActivity(act4)
 
         }

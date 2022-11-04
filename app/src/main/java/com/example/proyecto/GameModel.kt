@@ -252,7 +252,7 @@ class GameModel : ViewModel() {
 
 
 
-
+/*
     fun GetRandomQuestions(difficulty: Int, questions: List<QuestionWithAnswers>) {
 
 
@@ -269,13 +269,7 @@ class GameModel : ViewModel() {
             }
             gameQuestions.add(question)
 
-            var answers = mutableListOf<String>()
 
-            for (ans in question.answers){
-                if (ans.correct){
-                    answers.add(ans.content)
-                }
-            }
 
             var wrongAnswer = question.answers.random()
             answers.add(wrongAnswer.content)
@@ -290,6 +284,7 @@ class GameModel : ViewModel() {
         }
         NumberOfQuestions = gameQuestions.size
     }
+  */
     fun setHints(num: Int){
         hintsRemaining = num
     }

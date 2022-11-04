@@ -10,6 +10,7 @@ interface GameDao {
     @Query("SELECT * FROM games")
     fun getGameWithQuestions(): List<GameWithQuestions>
 
+
     @Transaction
     @Query("SELECT * FROM questions")
     fun GetAllQuesitonsWithAnswers(): List<QuestionWithAnswers>
@@ -17,6 +18,14 @@ interface GameDao {
     @Transaction
     @Query("SELECT * FROM questions WHERE topic = :topic")
     fun GetQuestionsByTopic(topic: String): List<QuestionWithAnswers>
+
+    @Transaction
+    @Query("SELECT * FROM questions WHERE questionId IN (SELECT questionId FROM game_questions WHERE gameId = :gameId)")
+    fun GetQuestionsByGameId(gameId: Int): List<QuestionWithAnswers>
+
+    @Transaction
+    @Query("SELECT * FROM questions WHERE topic in(:topics) ")
+    fun GetQuestionsByTopics(topics: List<String>): List<QuestionWithAnswers>
 
     @Insert
     fun AddQuestion(question: Question)
@@ -54,8 +63,14 @@ interface GameDao {
     @Query("SELECT * FROM games ORDER BY gameId DESC LIMIT 1")
     fun getLastUnfinishedGame(): Game
 
+    @Query("SELECT gameId FROM games ORDER BY gameId DESC LIMIT 1")
+    fun getLastUnfinishedGameId(): Int
+
     @Query("SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId")
     fun getNumberOfQuestionsByGameId(gameId: Int): Int
+
+    @Query("INSERT INTO game_questions Values(:gameId, :questionId)")
+    fun addGameQuestions(gameId: Int, questionId: Int)
 }
 
 //val score: Double,
