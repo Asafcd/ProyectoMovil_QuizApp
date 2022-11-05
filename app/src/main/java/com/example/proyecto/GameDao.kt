@@ -24,6 +24,9 @@ interface GameDao {
     @Insert
     fun AddQuestions(questions: List<Question>)
 
+    @Update()
+    fun UpdateGame(game: Game)
+
     @Delete
     fun DeleteQuestion(question: Question)
 
@@ -51,23 +54,34 @@ interface GameDao {
     @Query("INSERT INTO games(score,finished,hints_enabled,difficulty,hints_available,player,isStarted) values(:score,:finished,:hintsEnabled, :difficulty, :hintsAvailable, :player, :isStarted)")
     fun AddGame(score: Double, finished: Boolean, hintsEnabled: Boolean, difficulty: Int, hintsAvailable: Int, player: String, isStarted: Boolean)
 
+    @Query("INSERT INTO game_questions Values(:gameId, :questionId)")
+    fun addGameQuestions(gameId: Int, questionId: Int)
+
     @Query("SELECT * FROM games ORDER BY gameId DESC LIMIT 1")
     fun getLastUnfinishedGame(): Game
+
+    @Query("SELECT gameId FROM games ORDER BY gameId DESC LIMIT 1")
+    fun getLastUnfinishedGameId(): Int
 
     @Query("SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId")
     fun getNumberOfQuestionsByGameId(gameId: Int): Int
 
     //Activity Puntuaciones top 5
-    @Transaction
+
     @Query("SELECT player, score FROM games ORDER BY score DESC LIMIT 5")
     fun getTopGamesWithScore(): List<GameWithScore>
 
     //ACtivity results
-    @Transaction
+
     @Query("SELECT player, score FROM games ORDER BY score DESC")
     fun getGamesWithScore(): List<GameWithScore>
 
+    @Query("SELECT * FROM questions WHERE questionId IN (SELECT questionId FROM game_questions WHERE gameId = :gameId)")
+    fun GetQuestionsByGameId(gameId: Int): List<QuestionWithAnswers>
 
+    @Transaction
+    @Query("SELECT * FROM questions WHERE topic in(:topics) ")
+    fun GetQuestionsByTopics(topics: List<String>): List<QuestionWithAnswers>
 }
 
 //val score: Double,
