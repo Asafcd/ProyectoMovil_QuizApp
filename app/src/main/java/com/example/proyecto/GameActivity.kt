@@ -201,6 +201,19 @@ class GameActivity : AppCompatActivity() {
             act4.putExtra(DIFICULTY, gameModel.getDifficultyString())
             act4.putExtra(CORRECTAS, gameModel.getQuestionsAnsweredCorrectly)
             //act4.putExtra(HINTS, gameModel.getHintsUsed)
+
+            var gameData = db.gameDao().getLastUnfinishedGame()
+            var gameId = gameData.gameId
+            var gameDif = gameData.difficulty
+            var hintsReamining = gameModel.hintsRemaining
+            var score = gameModel.score
+            var finished = true
+            var isStarted = true
+            var player = gameData.player
+
+            var game = Game(gameId, score.toDouble(), finished, gameData.hintsEnabled, gameDif, hintsReamining, player, isStarted)
+
+            db.gameDao().UpdateGame(game)
             startActivity(act4)
 
         }
