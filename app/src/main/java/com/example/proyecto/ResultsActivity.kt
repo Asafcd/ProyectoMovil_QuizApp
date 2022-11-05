@@ -1,10 +1,12 @@
 package com.example.proyecto
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -25,6 +27,7 @@ class ResultsActivity : AppCompatActivity() {
     lateinit var txt_top4: TextView
     lateinit var txt_top5: TextView
     lateinit var ll_scores: LinearLayout
+    lateinit var btnInicio: Button
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,5 +56,10 @@ class ResultsActivity : AppCompatActivity() {
             topList[index].text = "${index+1}   -    ${topScores[index].score}   -   FRN"
         }
 
+        btnInicio = findViewById(R.id.btn_regresar)
+        btnInicio.setOnClickListener {
+            val act1 = Intent(this,MainMenuActivity::class.java)
+            startActivity(act1)
+        }
     }
 }
