@@ -29,6 +29,14 @@
             android:layout_gravity="center">
 
             <Button
+                android:id="@+id/btn_Continuar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="Continuar" />
+
+            <Button
                 android:id="@+id/btn_Jugar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,25 +47,15 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Opciones"
-                android:id="@+id/btn_opciones"
+                android:text="Puntuaciones"
+                android:id="@+id/btn_Puntuaciones"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center_horizontal"
                 />
             <Space
                 android:layout_width="15dp"
                 android:layout_height="50dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dificultad"/>
 
-            <Spinner
-                android:layout_marginTop="15dp"
-                android:id="@+id/spinner"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

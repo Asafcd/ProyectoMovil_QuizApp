@@ -34,7 +34,8 @@ class ResultsActivity : AppCompatActivity() {
         val scoreModel: ScoreModel by viewModels()
         val db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
         val topScores = db.gameDao().getTopGamesWithScore()
-        scoreModel.score = topScores[0].score
+        val currentScore = db.gameDao().getGamesWithScore()[0].score
+        scoreModel.score = currentScore
 
         txt_points = findViewById(R.id.txt_puntuacion)
         txt_points.text = "Puntaje: ${scoreModel.score }"
@@ -48,13 +49,8 @@ class ResultsActivity : AppCompatActivity() {
 
         var topList = listOf<TextView>(txt_top1,txt_top2,txt_top3,txt_top4,txt_top5)
 
-        for(top in topScores){
-            for(txt in topList){
-                var topn = 0
-                scoreModel.player = top.player
-                scoreModel.score = top.score
-                txt.text = "${topn++} - ${scoreModel.player} - ${scoreModel.score}"
-            }
+        for(index in 0..4){
+            topList[index].text = "${index+1}   -    ${topScores[index].score}   -   FRN"
         }
 
     }

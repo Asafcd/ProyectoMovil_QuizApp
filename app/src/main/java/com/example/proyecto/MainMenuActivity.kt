@@ -17,28 +17,16 @@ class MainMenuActivity : AppCompatActivity() {
     private lateinit var btn_puntuaciones: Button
     private lateinit var btn_jugar: Button
     private lateinit var btn_continuar: Button
-
+   // var gameIsFinished: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_menu)
 
-//        spin = findViewById(R.id.spinner)
-//        ArrayAdapter.createFromResource(
-//            this,
-//            R.array.Dificultad,
-//            android.R.layout.simple_spinner_item
-//        ).also { adapter ->
-//            // Specify the layout to use when the list of choices appears
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            // Apply the adapter to the spinner
-//            spin.adapter = adapter
-//        }
-
         var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
-//        var gameIsFinished = true
-//        if(db.gameDao().Size() > 0){
-//            var gameIsFinished: Boolean = db.gameDao().isFinished()
-//        }
+        var gameIsFinished = true
+        if(db.gameDao().Size() > 0){
+            gameIsFinished = db.gameDao().isFinished()
+        }
         btn_jugar = findViewById<Button>(R.id.btn_Jugar)
         btn_jugar.setOnClickListener {
             val act2 = Intent(this,OptionsMenuActivity::class.java)
@@ -49,9 +37,11 @@ class MainMenuActivity : AppCompatActivity() {
             val act3 = Intent(this,GameActivity::class.java)
             startActivity(act3)
         }
-//        if(gameIsFinished){
-//            btn_continuar.isGone = true
-//        }
+        if(gameIsFinished){
+            btn_continuar.isGone = true
+        }else{
+            btn_continuar.isGone = false
+        }
 
         btn_puntuaciones = findViewById<Button>(R.id.btn_Puntuaciones)
         btn_puntuaciones.setOnClickListener {

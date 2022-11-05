@@ -71,9 +71,12 @@ interface GameDao {
     @Query("SELECT player, score FROM games ORDER BY score DESC LIMIT 5")
     fun getTopGamesWithScore(): List<GameWithScore>
 
+    @Query("SELECT player, score FROM games ORDER BY score DESC")
+    fun getAllTopGamesWithScore(): List<GameWithScore>
+
     //ACtivity results
 
-    @Query("SELECT player, score FROM games ORDER BY score DESC")
+    @Query("SELECT player, score FROM games ORDER BY gameId DESC")
     fun getGamesWithScore(): List<GameWithScore>
 
     @Query("SELECT * FROM questions WHERE questionId IN (SELECT questionId FROM game_questions WHERE gameId = :gameId)")

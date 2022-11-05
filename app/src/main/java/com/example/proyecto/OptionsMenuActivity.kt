@@ -963,9 +963,9 @@ class OptionsMenuActivity : AppCompatActivity() {
 
         btn_iniciar = findViewById<Button>(R.id.btn_iniciar)
         btn_iniciar.setOnClickListener {
-            for(questionWithAnswer in allQuestions){
-                db.gameDao().UpdateQuestion(questionWithAnswer.question)
-            }
+//            for(questionWithAnswer in allQuestions){
+//                db.gameDao().UpdateQuestion(questionWithAnswer.question)
+//            }
 
             val act3 = Intent(this,GameActivity::class.java)
             if(hintsActive.isChecked){

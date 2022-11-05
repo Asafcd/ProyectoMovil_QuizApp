@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class ScoreModel: ViewModel() {
     var score = 0.0
-    var player ="front"
+    var player ="frn"
 
     val getScore: Double
         get() = score
