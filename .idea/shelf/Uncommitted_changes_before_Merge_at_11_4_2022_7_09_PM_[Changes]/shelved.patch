@@ -1,0 +1,236 @@
+Index: app/src/main/java/com/example/proyecto/GameDao.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.proyecto\n\nimport androidx.room.*\n\n\n@Dao\ninterface GameDao {\n\n    @Transaction\n    @Query(\"SELECT * FROM games\")\n    fun getGameWithQuestions(): List<GameWithQuestions>\n\n    @Transaction\n    @Query(\"SELECT * FROM questions\")\n    fun GetAllQuesitonsWithAnswers(): List<QuestionWithAnswers>\n\n    @Transaction\n    @Query(\"SELECT * FROM questions WHERE topic = :topic\")\n    fun GetQuestionsByTopic(topic: String): List<QuestionWithAnswers>\n\n    @Transaction\n    @Query(\"SELECT gameId, score FROM games ORDER BY score DESC LIMIT 5\")\n    fun getGamesWithScore(): List<GameWithScore>\n\n    @Insert\n    fun AddQuestion(question: Question)\n\n    @Insert\n    fun AddQuestions(questions: List<Question>)\n\n    @Delete\n    fun DeleteQuestion(question: Question)\n\n    @Delete\n    fun DeleteQuestions(questions: List<Question>)\n\n    @Update\n    fun UpdateQuestion(question: Question)\n\n    @Update\n    fun UpdateQuestions(vararg questions: Question)\n\n\n    @Query(\"SELECT * FROM answers WHERE questionId = :questionId \")\n    fun getAnswersForQuestion(questionId: Int): List<Answer>\n\n    @Transaction\n    @Query(\"SELECT Finished FROM games WHERE gameId=(SELECT max(gameId) FROM games) \")\n    fun isFinished(): Boolean\n\n\n    @Query(\"SELECT count(gameId) FROM games\")\n    fun Size(): Int\n\n    @Query(\"INSERT INTO games(score,finished,hints_enabled,difficulty,hints_available,player,isStarted) values(:score,:finished,:hintsEnabled, :difficulty, :hintsAvailable, :player, :isStarted)\")\n    fun AddGame(score: Double, finished: Boolean, hintsEnabled: Boolean, difficulty: Int, hintsAvailable: Int, player: String, isStarted: Boolean)\n\n    @Query(\"SELECT * FROM games ORDER BY gameId DESC LIMIT 1\")\n    fun getLastUnfinishedGame(): Game\n\n    @Query(\"SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId\")\n    fun getNumberOfQuestionsByGameId(gameId: Int): Int\n}\n\n//val score: Double,\n//val finished: Boolean,\n//@ColumnInfo(name = \"hints_enabled\") val hintsEnabled: Boolean,\n//val difficulty: Int,\n//@ColumnInfo(name = \"hints_available\") val hintsAvailable: Int,\n//val player: String,\n//val isStarted: Boolean)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/proyecto/GameDao.kt b/app/src/main/java/com/example/proyecto/GameDao.kt
+--- a/app/src/main/java/com/example/proyecto/GameDao.kt	
++++ b/app/src/main/java/com/example/proyecto/GameDao.kt	
+@@ -18,10 +18,6 @@
+     @Query("SELECT * FROM questions WHERE topic = :topic")
+     fun GetQuestionsByTopic(topic: String): List<QuestionWithAnswers>
+ 
+-    @Transaction
+-    @Query("SELECT gameId, score FROM games ORDER BY score DESC LIMIT 5")
+-    fun getGamesWithScore(): List<GameWithScore>
+-
+     @Insert
+     fun AddQuestion(question: Question)
+ 
+@@ -60,6 +56,18 @@
+ 
+     @Query("SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId")
+     fun getNumberOfQuestionsByGameId(gameId: Int): Int
++
++    //Activity Puntuaciones top 5
++    @Transaction
++    @Query("SELECT player, score FROM games ORDER BY score DESC LIMIT 5")
++    fun getTopGamesWithScore(): List<GameWithScore>
++
++    //ACtivity results
++    @Transaction
++    @Query("SELECT player, score FROM games ORDER BY score DESC")
++    fun getGamesWithScore(): List<GameWithScore>
++
++
+ }
+ 
+ //val score: Double,
+Index: app/src/main/res/layout-land/activity_results.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout-land/activity_results.xml b/app/src/main/res/layout-land/activity_results.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout-land/activity_results.xml	
++++ /dev/null	
+@@ -1,89 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:background="#fee04c"
+-    android:orientation="vertical"
+-    tools:context=".ResultsActivity">
+-
+-    <LinearLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_margin="30dp"
+-        android:background="@color/black"
+-        android:orientation="horizontal">
+-
+-        <TextView
+-            android:id="@+id/txt_puntuacion"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_margin="10dp"
+-            android:layout_weight="1"
+-            android:text="Puntuacion: "
+-            android:textColor="@color/white"
+-            android:textSize="30sp" />
+-    </LinearLayout>
+-
+-    <LinearLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_margin="20dp"
+-        android:orientation="horizontal">
+-
+-        <LinearLayout
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_margin="20dp"
+-
+-            android:orientation="vertical">
+-
+-            <TextView
+-                android:id="@+id/txt_correctas"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginHorizontal="30dp"
+-                android:layout_weight="1"
+-                android:text="Correctas: "
+-                android:textColor="@color/black"
+-                android:textSize="25sp" />
+-
+-            <TextView
+-                android:id="@+id/txt_dificultadUsada"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginHorizontal="30dp"
+-                android:layout_weight="1"
+-                android:text="Dificultad: "
+-                android:textColor="@color/black"
+-                android:textSize="25sp" />
+-
+-            <TextView
+-                android:id="@+id/txt_pistasUsadas"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginHorizontal="30dp"
+-                android:layout_weight="1"
+-                android:text="Pistas usadas: "
+-                android:textColor="@color/black"
+-                android:textSize="25sp" />
+-        </LinearLayout>
+-
+-        <LinearLayout
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_margin="30dp"
+-            android:background="@color/black"
+-            android:orientation="vertical">
+-
+-            <ImageView
+-                android:id="@+id/img_result"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:src="@drawable/perrillo" />
+-        </LinearLayout>
+-    </LinearLayout>
+-
+-
+-</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/proyecto/MainMenuActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.proyecto\n\nimport android.content.Intent\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport android.widget.ArrayAdapter\nimport android.widget.Button\nimport android.widget.Spinner\nimport android.widget.Toast\nimport androidx.core.view.isGone\nimport androidx.room.Room\n\n\nclass MainMenuActivity : AppCompatActivity() {\n\n//    private lateinit var spin: Spinner\n    private lateinit var btn_puntuaciones: Button\n    private lateinit var btn_jugar: Button\n    private lateinit var btn_continuar: Button\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.main_menu)\n\n//        spin = findViewById(R.id.spinner)\n//        ArrayAdapter.createFromResource(\n//            this,\n//            R.array.Dificultad,\n//            android.R.layout.simple_spinner_item\n//        ).also { adapter ->\n//            // Specify the layout to use when the list of choices appears\n//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)\n//            // Apply the adapter to the spinner\n//            spin.adapter = adapter\n//        }\n\n        var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,\"GameDatabase\").createFromAsset(\"database/GameDatabase.db\").allowMainThreadQueries().build()\n        var gameIsFinished = true\n//        if(db.gameDao().Size() > 0){\n//            var gameIsFinished: Boolean = db.gameDao().isFinished()\n//        }\n        btn_jugar = findViewById<Button>(R.id.btn_Jugar)\n        btn_jugar.setOnClickListener {\n            val act2 = Intent(this,OptionsMenuActivity::class.java)\n            startActivity(act2)\n        }\n        btn_continuar = findViewById<Button>(R.id.btn_Continuar)\n        btn_continuar.setOnClickListener {\n            val act3 = Intent(this,GameActivity::class.java)\n            startActivity(act3)\n        }\n//        if(gameIsFinished){\n//            btn_continuar.isGone = true\n//        }\n\n        btn_puntuaciones = findViewById<Button>(R.id.btn_Puntuaciones)\n        btn_puntuaciones.setOnClickListener {\n            val act4 = Intent(this,OptionsMenuActivity::class.java)//Este cambias Frontreras\n            startActivity(act4)\n        }\n\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/proyecto/MainMenuActivity.kt b/app/src/main/java/com/example/proyecto/MainMenuActivity.kt
+--- a/app/src/main/java/com/example/proyecto/MainMenuActivity.kt	
++++ b/app/src/main/java/com/example/proyecto/MainMenuActivity.kt	
+@@ -55,7 +55,7 @@
+ 
+         btn_puntuaciones = findViewById<Button>(R.id.btn_Puntuaciones)
+         btn_puntuaciones.setOnClickListener {
+-            val act4 = Intent(this,OptionsMenuActivity::class.java)//Este cambias Frontreras
++            val act4 = Intent(this,ScoresActivity::class.java)
+             startActivity(act4)
+         }
+ 
+Index: app/src/main/java/com/example/proyecto/GameModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.proyecto\n\nimport androidx.lifecycle.ViewModel\n\nclass GameModel : ViewModel() {\n     var allQuestions = mutableListOf<QuestionWithAnswers>()\n     var gameQuestions = mutableListOf<QuestionWithAnswers>()\n     var NumberOfQuestions = 0\n     var currentQuestionIndex = 0\n     var questionAnswers = mutableListOf<List<String>>()\n    var gameDifficulty = 0\n     var score = 0\n     var questionsAnswered = 0\n     var questionsAnsweredCorrectly = 0\n     var hintsRemaining = 0\n     var hintsUsed = 0\n\n    private var consecutiveAnswersCorrectly = 0\n\n\n\n\n/*\n    init {\n        allQuestions.add(\n            Question(\n                \"¿Cuál es la extensión territorial de la CDMX?\",\n                \"1,485 km2\",\n                listOf(\"1,845 km2\", \"2,172 km2\", \"937 km2\"),\n                \"Geografía\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuál es el estado más pequeño de México?\",\n                \"CDMX\",\n                listOf(\"Colima\", \"Tlaxcala\", \"Morelos\"),\n                \"Geografía\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿A qué estado le pertenece la ciudad de Tijuana?\",\n                \"Baja California\",\n                listOf(\"Baja California Sur\", \"California\", \"Sonora\"),\n                \"Geografía\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuál es el rio más grande del mundo?\",\n                \"Amazonas\",\n                listOf(\"Nilo\", \"Mississippi\", \"Congo\"),\n                \"Geografía\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuántos oceanos hay en el mundo?\",\n                \"5\",\n                listOf(\"7\", \"2\", \"4\"),\n                \"Geografía\",\n                false,\n                \"\",\n                false\n            )\n        )\n\n        allQuestions.add(\n            Question(\n                \"¿Quién es el autor de la frase 'Pienso luego existo'?\",\n                \"Descartes\",\n                listOf(\"Locke\", \"Socrates\", \"Platón\"),\n                \"Cultura General\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuál no es una maravilla del mundo moderno?\",\n                \"La tumba de Tutankamón\",\n                listOf(\"La muralla china\", \"Chichen Itzá\", \"Las pirámides de Giza\"),\n                \"Cultura General\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿En qué año se descubrió América?\",\n                \"1492\",\n                listOf(\"1576\", \"1824\", \"1342\"),\n                \"Cultura General\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuántos litros de sangre tiene una persona adulta?\",\n                \"4 - 6 L\",\n                listOf(\"2 - 4 L\", \"7+ L\", \"5 - 7 L\"),\n                \"Cultura General\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Qué continente no es parte del viejo mundo?\",\n                \"América\",\n                listOf(\"África\", \"Asia\", \"Europa\"),\n                \"Cultura General\",\n                false,\n                \"\",\n                false\n            )\n        )\n\n        allQuestions.add(\n            Question(\n                \"¿Cuántos reinos animales existen?\",\n                \"5\",\n                listOf(\"9\", \"12\", \"17\"),\n                \"Animales\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Qué tipo de animal es el tiburón?\",\n                \"Pez\",\n                listOf(\"Mamífero\", \"Anfibio\", \"Reptil\"),\n                \"Animales\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"Los animales que tienen el cuerpo cubierto por una escama dura y áspera se llaman...\",\n                \"Reptiles\",\n                listOf(\"Mamíferos\", \"Anfibios\", \"Peces\"),\n                \"Animales\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"Las esponjas son animales invertebrados de la familia de los...\",\n                \"Poríferos\",\n                listOf(\"Insectos\", \"Gusanos\", \"Moluscos\"),\n                \"Animales\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"Los animales invertebrados, que tienen 4 pares de patas y no poseen antenas, se llaman...\",\n                \"Arácnidos\",\n                listOf(\"Insectos\", \"Crustaceos\", \"Poríferos\"),\n                \"Animales\",\n                false,\n                \"\",\n                false\n            )\n        )\n\n        allQuestions.add(\n            Question(\n                \"¿Quién es el protagonista de 'The Legend of Zelda'?\",\n                \"Link\",\n                listOf(\"Zelda\", \"Ganondorf\", \"Impa\"),\n                \"Videojuegos\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuál es el juego más vendido de la historia?\",\n                \"Wii Sports\",\n                listOf(\"Tetris\", \"Super Mario\", \"Pokemon Red/Blue\"),\n                \"Videojuegos\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿En cuál fue el primer juego en donde apareció el personaje 'Mario'?\",\n                \"Donkey Kong\",\n                listOf(\"Super Mario Bros\", \"Super Smash Brothers 64\", \"The Legend of Zelda\"),\n                \"Videojuegos\",\n                false,\n                \"\",\n                false\n            )\n        )\n\n        allQuestions.add(\n            Question(\n                \"¿Cuántos luchadores hay en Street Fighter II?\",\n                \"12\",\n                listOf(\"8\", \"10\", \"16\"),\n                \"Videojuegos\",\n                false,\n                \"\",\n                false\n            )\n        )\n        allQuestions.add(\n            Question(\n                \"¿Cuál juego de los siguientes salió primero?\",\n                \"Pong\",\n                listOf(\"Tetris\", \"Pac-man\", \"Sonic\"),\n                \"Videojuegos\",\n                false,\n                \"\",\n                false\n            )\n        )\n\n    }\n*/\n\n\n\n\n    fun GetRandomQuestions(difficulty: Int, questions: List<QuestionWithAnswers>) {\n\n\n        allQuestions.addAll(questions)\n\n        for (i in 0 ..9){\n            //val randInt = Random.nextInt(allQuestions.size)\n            //var question = allQuestions[randInt]\n            //gameQuestions.add(question)\n            allQuestions.shuffle()\n            var question: QuestionWithAnswers = allQuestions.random()\n            while (gameQuestions.contains(question)){\n                question = allQuestions.random()\n            }\n            gameQuestions.add(question)\n\n            var answers = mutableListOf<String>()\n\n            for (ans in question.answers){\n                if (ans.correct){\n                    answers.add(ans.content)\n                }\n            }\n\n            var wrongAnswer = question.answers.random()\n            answers.add(wrongAnswer.content)\n            for (i in 2..difficulty) {\n                while (answers.indexOf(wrongAnswer.content) != -1) {\n                    wrongAnswer = question.answers.random()\n                }\n                answers.add(wrongAnswer.content)\n            }\n            answers.shuffle()\n            questionAnswers.add(answers)\n        }\n        NumberOfQuestions = gameQuestions.size\n    }\n    fun setHints(num: Int){\n        hintsRemaining = num\n    }\n    fun GetQuestionAnswers(): List<String> {\n        return questionAnswers[currentQuestionIndex]\n    }\n    fun getDifficultyString(): String{\n        if (gameDifficulty==1){ return \"Fácil\" }\n        if (gameDifficulty==2){ return \"Normal\" }\n        if (gameDifficulty==3){ return \"Difícil\" }\n        return \"\"\n    }\n\n    val getQuestionsAnsweredCorrectly: Int\n        get() = questionsAnsweredCorrectly\n\n    val getAnsweredQuestion: Int\n        get() = questionsAnswered\n\n    val getScore: Int\n        get()= score\n\n    val TotalNumberOfQuestions: Int\n        get() = NumberOfQuestions\n\n    val currentQuestion: QuestionWithAnswers\n        get() = gameQuestions[currentQuestionIndex]\n\n    val currentQuestionText: String\n        get() = gameQuestions[currentQuestionIndex].question.question\n\n    val currentQuestionAnswer: String?\n        get() = getCorrectAnswer(gameQuestions[currentQuestionIndex])\n\n    val questionNumber: Int\n        get() = currentQuestionIndex +1\n\n    val isEmpty: Boolean\n         get() = gameQuestions.size == 0\n\n    val getHints: Int\n        get() = hintsRemaining\n\n    val getHintsUsed: Int\n        get() = hintsUsed\n\n    val getConsecutiveAnswersCorrectly : Int\n        get() = consecutiveAnswersCorrectly\n    val questionHints: Boolean\n        get() = gameQuestions[currentQuestionIndex].question.hintsUsed\n    fun addQuestionAnsweredCorrectly(){\n        questionsAnsweredCorrectly++\n    }\n\n    fun addConsecutiveAnswerCorrectly(){\n        consecutiveAnswersCorrectly++\n    }\n    fun restartConsecutiveAnsweredCorrectly(){\n        consecutiveAnswersCorrectly = 0\n    }\n\n    fun useHint(){\n        if (hintsRemaining >= 1) {\n            hintsRemaining -= 1\n            hintsUsed++\n            score-=20\n            consecutiveAnswersCorrectly = 0\n            if(!gameQuestions[currentQuestionIndex].question.hintsUsed){\n                gameQuestions[currentQuestionIndex].question.question = \"${gameQuestions[currentQuestionIndex].question}(Pista usada)\"\n                gameQuestions[currentQuestionIndex].question.hintsUsed = true\n\n            }\n        }\n    }\n    fun addHint(){\n        hintsRemaining++\n    }\n\n    fun nextQuestion(){\n        currentQuestionIndex = (currentQuestionIndex + 1) % gameQuestions.size\n    }\n\n    fun prevQuestion(){\n        if(currentQuestionIndex >= 0) {\n            currentQuestionIndex--\n        }\n        if (currentQuestionIndex == -1){\n            currentQuestionIndex = gameQuestions.size -1\n        }\n    }\n\n    fun Answer(){\n        questionsAnswered++\n    }\n\n    fun addScore(){ score+=100}\n\n    val IsFinished: Boolean\n        get() = questionsAnswered == gameQuestions.size\n\n    fun getCorrectAnswer(questionWithAnswers: QuestionWithAnswers): String?{\n        for (ans in questionWithAnswers.answers)\n        {\n            if (ans.correct)\n            {\n                return ans.content\n            }\n        }\n        return \"\"\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/proyecto/GameModel.kt b/app/src/main/java/com/example/proyecto/GameModel.kt
+--- a/app/src/main/java/com/example/proyecto/GameModel.kt	
++++ b/app/src/main/java/com/example/proyecto/GameModel.kt	
+@@ -17,9 +17,6 @@
+ 
+     private var consecutiveAnswersCorrectly = 0
+ 
+-
+-
+-
+ /*
+     init {
+         allQuestions.add(
+@@ -250,9 +247,6 @@
+     }
+ */
+ 
+-
+-
+-
+     fun GetRandomQuestions(difficulty: Int, questions: List<QuestionWithAnswers>) {
+ 
+ 
+Index: app/src/main/java/com/example/proyecto/ScoreModel.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/proyecto/ScoreModel.kt b/app/src/main/java/com/example/proyecto/ScoreModel.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/proyecto/ScoreModel.kt	
+@@ -0,0 +1,15 @@
++package com.example.proyecto
++
++import androidx.lifecycle.ViewModel
++
++class ScoreModel: ViewModel() {
++    var score = 0.0
++    var player ="front"
++
++    val getScore: Double
++        get() = score
++
++    val getInit: String
++        get() = player
++
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_scores.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:orientation=\"vertical\"\n\n    tools:context=\".ScoresActivity\">\n\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:orientation=\"vertical\">\n\n        <LinearLayout\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:layout_gravity=\"center\"\n            android:orientation=\"horizontal\">\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"Todos los puntajes\"\n                android:layout_margin=\"20dp\"\n                android:textSize=\"40dp\" />\n        </LinearLayout>\n\n        <LinearLayout\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:layout_gravity=\"center\"\n            android:orientation=\"horizontal\">\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_weight=\"1\"\n                android:text=\"Iniciales\"\n                android:textSize=\"20dp\" />\n\n            <Space\n                android:layout_width=\"50dp\"\n                android:layout_height=\"20dp\"/>\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n\n                android:layout_weight=\"1\"\n                android:text=\"Puntaje\"\n                android:textSize=\"20dp\" />\n        </LinearLayout>\n        <ScrollView\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\">\n            <LinearLayout\n                android:id=\"@+id/linear_scores\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:orientation=\"vertical\">\n                <TextView\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n\n                    android:layout_weight=\"1\"\n                    android:text=\"EJEMPLO\"\n                    android:textSize=\"20dp\" />\n            </LinearLayout>\n        </ScrollView>\n\n\n    </LinearLayout>\n\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_scores.xml b/app/src/main/res/layout/activity_scores.xml
+--- a/app/src/main/res/layout/activity_scores.xml	
++++ b/app/src/main/res/layout/activity_scores.xml	
+@@ -60,13 +60,7 @@
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical">
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+ 
+-                    android:layout_weight="1"
+-                    android:text="EJEMPLO"
+-                    android:textSize="20dp" />
+             </LinearLayout>
+         </ScrollView>
+ 

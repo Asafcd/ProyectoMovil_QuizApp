@@ -1,6 +1,6 @@
 package com.example.proyecto
 
 data class GameWithScore(
-    val gameid: Int,
+    val player: String,
     val score: Double
 )
