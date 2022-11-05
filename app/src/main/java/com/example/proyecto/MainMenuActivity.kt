@@ -35,7 +35,7 @@ class MainMenuActivity : AppCompatActivity() {
 //        }
 
         var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
-        var gameIsFinished = true
+//        var gameIsFinished = true
 //        if(db.gameDao().Size() > 0){
 //            var gameIsFinished: Boolean = db.gameDao().isFinished()
 //        }

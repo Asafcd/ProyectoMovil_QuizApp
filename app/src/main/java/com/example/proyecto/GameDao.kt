@@ -43,7 +43,7 @@ interface GameDao {
     fun UpdateQuestion(question: Question)
 
     @Update
-    fun UpdateQuestions(vararg questions: Question)
+    fun UpdateQuestions(questions: List<Question>)
 
     @Update
     fun UpdateGame(game: Game)
