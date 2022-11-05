@@ -17,9 +17,6 @@ class GameModel : ViewModel() {
 
     private var consecutiveAnswersCorrectly = 0
 
-
-
-
 /*
     init {
         allQuestions.add(
@@ -250,9 +247,6 @@ class GameModel : ViewModel() {
     }
 */
 
-
-
-/*
     fun GetRandomQuestions(difficulty: Int, questions: List<QuestionWithAnswers>) {
 
 
@@ -269,7 +263,13 @@ class GameModel : ViewModel() {
             }
             gameQuestions.add(question)
 
+            var answers = mutableListOf<String>()
 
+            for (ans in question.answers){
+                if (ans.correct){
+                    answers.add(ans.content)
+                }
+            }
 
             var wrongAnswer = question.answers.random()
             answers.add(wrongAnswer.content)
@@ -284,7 +284,6 @@ class GameModel : ViewModel() {
         }
         NumberOfQuestions = gameQuestions.size
     }
-  */
     fun setHints(num: Int){
         hintsRemaining = num
     }
@@ -353,7 +352,7 @@ class GameModel : ViewModel() {
             score-=20
             consecutiveAnswersCorrectly = 0
             if(!gameQuestions[currentQuestionIndex].question.hintsUsed){
-                gameQuestions[currentQuestionIndex].question.question = "${gameQuestions[currentQuestionIndex].question.question}(Pista usada)"
+                gameQuestions[currentQuestionIndex].question.question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
                 gameQuestions[currentQuestionIndex].question.hintsUsed = true
 
             }

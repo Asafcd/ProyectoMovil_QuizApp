@@ -56,6 +56,18 @@ interface GameDao {
 
     @Query("SELECT COUNT(questionId) FROM game_questions WHERE gameId = :gameId")
     fun getNumberOfQuestionsByGameId(gameId: Int): Int
+
+    //Activity Puntuaciones top 5
+    @Transaction
+    @Query("SELECT player, score FROM games ORDER BY score DESC LIMIT 5")
+    fun getTopGamesWithScore(): List<GameWithScore>
+
+    //ACtivity results
+    @Transaction
+    @Query("SELECT player, score FROM games ORDER BY score DESC")
+    fun getGamesWithScore(): List<GameWithScore>
+
+
 }
 
 //val score: Double,

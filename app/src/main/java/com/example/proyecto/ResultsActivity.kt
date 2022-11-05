@@ -50,17 +50,6 @@ class ResultsActivity : AppCompatActivity() {
         }
 
         txtPuntuacion.text = "Puntaje: ${score}"
-        txtDificultad.text = "Dificultad: ${dificulty}"
-        txtCorrectas.text = "Correctas: ${corrects}"
-        txtHintsUsadas.text = "Pistas Usadas: ${hintsUsed}"
-
-        if(score>=801) {imgResult.setImageResource(R.drawable.perfecto); txtAdvice.text = "EXCELENTE!"}
-        if(score in 601..800) {imgResult.setImageResource(R.drawable.meh); txtAdvice.text = "Puedes hacerlo mejor, chavo"}
-        if(score in 401..600) {imgResult.setImageResource(R.drawable.mal); txtAdvice.text = "Muy conformista de tu parte"}
-        if(score in 201..400) {imgResult.setImageResource(R.drawable.muymal); txtAdvice.text = "Mi hijo de 9 sabe mas que tú"}
-        if(score<200) {imgResult.setImageResource(R.drawable.terrible); txtAdvice.text = "Regresa al kinder mejor"}
-
-
 
 
 

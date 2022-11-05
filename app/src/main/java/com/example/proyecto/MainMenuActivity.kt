@@ -55,7 +55,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         btn_puntuaciones = findViewById<Button>(R.id.btn_Puntuaciones)
         btn_puntuaciones.setOnClickListener {
-            val act4 = Intent(this,OptionsMenuActivity::class.java)//Este cambias Frontreras
+            val act4 = Intent(this,ScoresActivity::class.java)
             startActivity(act4)
         }
 
