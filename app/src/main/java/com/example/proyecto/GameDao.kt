@@ -45,6 +45,8 @@ interface GameDao {
     @Update
     fun UpdateQuestions(vararg questions: Question)
 
+    @Update
+    fun UpdateGame(game: Game)
 
     @Query("SELECT * FROM answers WHERE questionId = :questionId ")
     fun getAnswersForQuestion(questionId: Int): List<Answer>

@@ -3,11 +3,14 @@ package com.example.proyecto
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.room.Room
@@ -28,6 +31,45 @@ class GameActivity : AppCompatActivity() {
     private lateinit var btnNext: Button
     private lateinit var btnFinish: Button
 
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            val alertDialog = AlertDialog.Builder(this@GameActivity)
+            alertDialog.setMessage("¿Quieres salir de la partida?")
+            alertDialog.setTitle("Confirmar salida")
+            alertDialog.setPositiveButton("Si")  { dialog, id ->
+
+                super.onBackPressed()
+                var db = Room.databaseBuilder(applicationContext, GameDatabase::class.java ,"GameDatabase").createFromAsset("database/GameDatabase.db").allowMainThreadQueries().build()
+
+
+                var gameData = db.gameDao().getLastUnfinishedGame()
+
+                val gameModel: GameModel by viewModels()
+
+                var gameId = gameData.gameId
+                var gameDif = gameData.difficulty
+                var hintsReamining = gameModel.hintsRemaining
+                var score = gameModel.score
+                var finished = false
+                var isStarted = true
+                var player = gameData.player
+
+                var game = Game(gameId, score.toDouble(), finished, gameData.hintsEnabled, gameDif, hintsReamining, player, isStarted)
+
+                for (question in gameModel.gameQuestions){
+                    db.gameDao().UpdateQuestion(question.question)
+                }
+                db.gameDao().UpdateGame(game)
+
+            }
+                .setNegativeButton("No") { dialog, id ->
+                    dialog.dismiss()
+                }
+            alertDialog.show()
+        }
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +113,7 @@ class GameActivity : AppCompatActivity() {
 
            for (question in questions){
                gameModel.gameQuestions.add(question)
-               gameModel.questionAnswers
+
 
                var answers = mutableListOf<String>()
 
@@ -80,13 +122,12 @@ class GameActivity : AppCompatActivity() {
                        answers.add(ans.content)
                    }
                }
-               var wrongAnswer = question.answers.random()
-               for (i in 0..gameData.difficulty){
-                   while(answers.indexOf(wrongAnswer.content) != -1 && !wrongAnswer.correct){
-                       wrongAnswer = question.answers.random()
+               while(answers.size <= gameData.difficulty){
+                   var randQuestion = question.answers.random()
+                   if(!answers.contains(randQuestion.content) && !randQuestion.correct){
+                       answers.add(randQuestion.content)
                    }
                }
-               answers.shuffle()
                gameModel.questionAnswers.add(answers)
            }
             gameModel.NumberOfQuestions = gameModel.gameQuestions.size
@@ -94,10 +135,15 @@ class GameActivity : AppCompatActivity() {
 
         txtQuestionNumber.text = "${gameModel.questionNumber} / ${gameModel.TotalNumberOfQuestions}"
 
-        txtQuestion.text = "${gameModel.currentQuestion.question}"
+        txtQuestion.text = "${gameModel.currentQuestion.question.question}"
 
         txtSubject.text = gameModel.currentQuestion.question.topic
         txtRemainingHints.text = "Restantes: ${gameModel.getHints}"
+
+
+
+
+
 
         val answers = gameModel.GetQuestionAnswers()
         var preguntasElim = gameModel.gameDifficulty-1
@@ -280,3 +326,6 @@ class GameActivity : AppCompatActivity() {
 
 
 }
+
+
+
