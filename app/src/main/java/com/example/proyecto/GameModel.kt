@@ -352,7 +352,7 @@ class GameModel : ViewModel() {
             score-=20
             consecutiveAnswersCorrectly = 0
             if(!gameQuestions[currentQuestionIndex].question.hintsUsed){
-                gameQuestions[currentQuestionIndex].question.question = "${gameQuestions[currentQuestionIndex].question}(Pista usada)"
+                gameQuestions[currentQuestionIndex].question.question = "${gameQuestions[currentQuestionIndex].question.question}(Pista usada)"
                 gameQuestions[currentQuestionIndex].question.hintsUsed = true
 
             }
